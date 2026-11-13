@@ -10,33 +10,91 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DescobrirRouteImport } from './routes/descobrir'
+import { Route as ExplorarRouteImport } from './routes/explorar'
+import { Route as FeedRouteImport } from './routes/feed'
+import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as TituloIdRouteImport } from './routes/titulo.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DescobrirRoute = DescobrirRouteImport.update({
+  id: '/descobrir',
+  path: '/descobrir',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExplorarRoute = ExplorarRouteImport.update({
+  id: '/explorar',
+  path: '/explorar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TituloIdRoute = TituloIdRouteImport.update({
+  id: '/titulo/$id',
+  path: '/titulo/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/descobrir': typeof DescobrirRoute
+  '/explorar': typeof ExplorarRoute
+  '/feed': typeof FeedRoute
+  '/perfil': typeof PerfilRoute
+  '/titulo/$id': typeof TituloIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/descobrir': typeof DescobrirRoute
+  '/explorar': typeof ExplorarRoute
+  '/feed': typeof FeedRoute
+  '/perfil': typeof PerfilRoute
+  '/titulo/$id': typeof TituloIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/descobrir': typeof DescobrirRoute
+  '/explorar': typeof ExplorarRoute
+  '/feed': typeof FeedRoute
+  '/perfil': typeof PerfilRoute
+  '/titulo/$id': typeof TituloIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/descobrir' | '/explorar' | '/feed' | '/perfil' | '/titulo/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/descobrir' | '/explorar' | '/feed' | '/perfil' | '/titulo/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/descobrir'
+    | '/explorar'
+    | '/feed'
+    | '/perfil'
+    | '/titulo/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DescobrirRoute: typeof DescobrirRoute
+  ExplorarRoute: typeof ExplorarRoute
+  FeedRoute: typeof FeedRoute
+  PerfilRoute: typeof PerfilRoute
+  TituloIdRoute: typeof TituloIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +106,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/descobrir': {
+      id: '/descobrir'
+      path: '/descobrir'
+      fullPath: '/descobrir'
+      preLoaderRoute: typeof DescobrirRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explorar': {
+      id: '/explorar'
+      path: '/explorar'
+      fullPath: '/explorar'
+      preLoaderRoute: typeof ExplorarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/titulo/$id': {
+      id: '/titulo/$id'
+      path: '/titulo/$id'
+      fullPath: '/titulo/$id'
+      preLoaderRoute: typeof TituloIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DescobrirRoute: DescobrirRoute,
+  ExplorarRoute: ExplorarRoute,
+  FeedRoute: FeedRoute,
+  PerfilRoute: PerfilRoute,
+  TituloIdRoute: TituloIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
