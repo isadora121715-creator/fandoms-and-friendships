@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Star, Gamepad2, Tv, Film } from "lucide-react";
-import { type Title, kindLabel } from "@/lib/mock";
+import { type Title, type Kind, kindLabel } from "@/lib/db";
 import { cn } from "@/lib/utils";
 
-const icon = { jogo: Gamepad2, serie: Tv, filme: Film };
+const icon: Record<Kind, typeof Film> = { jogo: Gamepad2, serie: Tv, filme: Film };
 
 // Poster art is generated from each title's hue (data-driven, not a theme color).
-export function Poster({ t, className, showName = true }: { t: Title; className?: string; showName?: boolean }) {
-  const Icon = icon[t.kind];
+export function Poster({ t, className, showName = true }: { t: Pick<Title, "id" | "kind" | "name" | "year" | "hue">; className?: string; showName?: boolean }) {
+  const Icon = icon[t.kind as Kind];
   return (
     <Link to="/titulo/$id" params={{ id: t.id }} className={cn("group relative block aspect-[2/3] overflow-hidden rounded-lg border border-border transition hover:-translate-y-1 hover:shadow-glow", className)}
       style={{ background: `radial-gradient(circle at 30% 20%, oklch(0.6 0.18 ${t.hue}), oklch(0.25 0.08 ${t.hue + 40}) 70%)` }}>
@@ -15,7 +15,7 @@ export function Poster({ t, className, showName = true }: { t: Title; className?
       {showName && (
         <div className="absolute inset-x-0 bottom-0 bg-fade p-2 pt-8">
           <p className="font-display text-sm font-bold leading-tight">{t.name}</p>
-          <p className="text-[11px] text-muted-foreground">{kindLabel[t.kind]} · {t.year}</p>
+          <p className="text-[11px] text-muted-foreground">{kindLabel[t.kind as Kind]} · {t.year}</p>
         </div>
       )}
     </Link>

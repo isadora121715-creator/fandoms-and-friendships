@@ -4,8 +4,9 @@ import { X, Heart } from "lucide-react";
 import { Shell } from "@/components/app/Shell";
 import { Avatar, Poster } from "@/components/app/bits";
 import { users, titles } from "@/lib/mock";
+// Preview only: compatibility matching is a planned next stage, so this screen uses sample people.
 
-export const Route = createFileRoute("/descobrir")({
+export const Route = createFileRoute("/_authenticated/descobrir")({
   head: () => ({ meta: [
     { title: "Descobrir pessoas — Lorebox" }, { name: "description", content: "Prévia: encontre pessoas com gostos em comum." },
     { property: "og:title", content: "Descobrir pessoas — Lorebox" }, { property: "og:description", content: "Prévia: encontre pessoas com gostos em comum." },

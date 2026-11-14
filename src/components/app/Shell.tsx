@@ -1,6 +1,10 @@
-import { Link } from "@tanstack/react-router";
-import { Home, Compass, User, Sparkles, Users } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Home, Compass, User, Sparkles, LogOut } from "lucide-react";
 import type { ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { meQuery } from "@/lib/db";
+import { Avatar } from "./bits";
 
 const nav = [
   { to: "/feed", label: "Feed", icon: Home },
@@ -14,6 +18,15 @@ export function Logo() {
 }
 
 export function Shell({ children }: { children: ReactNode }) {
+  const { data: me } = useQuery(meQuery);
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+  async function signOut() {
+    await qc.cancelQueries();
+    qc.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", replace: true });
+  }
   return (
     <div className="min-h-screen pb-20 md:pb-0">
       <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
@@ -26,7 +39,10 @@ export function Shell({ children }: { children: ReactNode }) {
               </Link>
             ))}
           </nav>
-          <span className="hidden items-center gap-1 text-xs text-muted-foreground sm:flex"><Users className="h-3.5 w-3.5" />Protótipo</span>
+          <div className="flex items-center gap-3">
+            {me && <Link to="/perfil" className="flex items-center gap-2 text-sm"><Avatar name={me.display_name} hue={me.avatar_hue} size={28} /><span className="hidden sm:inline">@{me.username}</span></Link>}
+            <button onClick={signOut} aria-label="Sair" className="text-muted-foreground hover:text-foreground"><LogOut className="h-4 w-4" /></button>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
