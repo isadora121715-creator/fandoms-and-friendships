@@ -20,7 +20,7 @@ function Discover() {
   const [i, setI] = useState(0);
   const [goal, setGoal] = useState(goals[1]);
   const [match, setMatch] = useState<string | null>(null);
-  const u = users[i % users.length];
+  const u = users[i % users.length]!;
   const shared = titles.slice(i % 4, (i % 4) + 3);
   const next = (like: boolean) => { if (like && i % 2 === 0) setMatch(u.name); setI(i + 1); };
   return (
