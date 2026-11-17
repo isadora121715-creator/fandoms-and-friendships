@@ -13,6 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDescobrirRouteImport } from './routes/_authenticated/descobrir'
+import { Route as AuthenticatedExplorarRouteImport } from './routes/_authenticated/explorar'
+import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/feed'
+import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
+import { Route as AuthenticatedTituloIdRouteImport } from './routes/_authenticated/titulo.$id'
+import { Route as AuthenticatedUUsernameRouteImport } from './routes/_authenticated/u.$username'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -33,16 +38,51 @@ const AuthenticatedDescobrirRoute = AuthenticatedDescobrirRouteImport.update({
   path: '/descobrir',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedExplorarRoute = AuthenticatedExplorarRouteImport.update({
+  id: '/explorar',
+  path: '/explorar',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedFeedRoute = AuthenticatedFeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTituloIdRoute = AuthenticatedTituloIdRouteImport.update({
+  id: '/titulo/$id',
+  path: '/titulo/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedUUsernameRoute = AuthenticatedUUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/descobrir': typeof AuthenticatedDescobrirRoute
+  '/explorar': typeof AuthenticatedExplorarRoute
+  '/feed': typeof AuthenticatedFeedRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
+  '/titulo/$id': typeof AuthenticatedTituloIdRoute
+  '/u/$username': typeof AuthenticatedUUsernameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/descobrir': typeof AuthenticatedDescobrirRoute
+  '/explorar': typeof AuthenticatedExplorarRoute
+  '/feed': typeof AuthenticatedFeedRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
+  '/titulo/$id': typeof AuthenticatedTituloIdRoute
+  '/u/$username': typeof AuthenticatedUUsernameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -50,14 +90,44 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/descobrir': typeof AuthenticatedDescobrirRoute
+  '/_authenticated/explorar': typeof AuthenticatedExplorarRoute
+  '/_authenticated/feed': typeof AuthenticatedFeedRoute
+  '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/titulo/$id': typeof AuthenticatedTituloIdRoute
+  '/_authenticated/u/$username': typeof AuthenticatedUUsernameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/descobrir'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/descobrir'
+    | '/explorar'
+    | '/feed'
+    | '/perfil'
+    | '/titulo/$id'
+    | '/u/$username'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/descobrir'
+  to:
+    | '/'
+    | '/auth'
+    | '/descobrir'
+    | '/explorar'
+    | '/feed'
+    | '/perfil'
+    | '/titulo/$id'
+    | '/u/$username'
   id:
-    '__root__' | '/' | '/_authenticated' | '/auth' | '/_authenticated/descobrir'
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/descobrir'
+    | '/_authenticated/explorar'
+    | '/_authenticated/feed'
+    | '/_authenticated/perfil'
+    | '/_authenticated/titulo/$id'
+    | '/_authenticated/u/$username'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -96,15 +166,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDescobrirRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/explorar': {
+      id: '/_authenticated/explorar'
+      path: '/explorar'
+      fullPath: '/explorar'
+      preLoaderRoute: typeof AuthenticatedExplorarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/feed': {
+      id: '/_authenticated/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof AuthenticatedFeedRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/perfil': {
+      id: '/_authenticated/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof AuthenticatedPerfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/titulo/$id': {
+      id: '/_authenticated/titulo/$id'
+      path: '/titulo/$id'
+      fullPath: '/titulo/$id'
+      preLoaderRoute: typeof AuthenticatedTituloIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/u/$username': {
+      id: '/_authenticated/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof AuthenticatedUUsernameRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDescobrirRoute: typeof AuthenticatedDescobrirRoute
+  AuthenticatedExplorarRoute: typeof AuthenticatedExplorarRoute
+  AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
+  AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedTituloIdRoute: typeof AuthenticatedTituloIdRoute
+  AuthenticatedUUsernameRoute: typeof AuthenticatedUUsernameRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDescobrirRoute: AuthenticatedDescobrirRoute,
+  AuthenticatedExplorarRoute: AuthenticatedExplorarRoute,
+  AuthenticatedFeedRoute: AuthenticatedFeedRoute,
+  AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedTituloIdRoute: AuthenticatedTituloIdRoute,
+  AuthenticatedUUsernameRoute: AuthenticatedUUsernameRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

@@ -3,6 +3,7 @@ import hero from "@/assets/hero.jpg";
 import { Logo } from "@/components/app/Shell";
 import { Poster } from "@/components/app/bits";
 import { titles } from "@/lib/mock";
+// Landing poster strip uses static sample titles so the public page needs no sign-in.
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -39,8 +40,8 @@ function Index() {
             <h1 className="text-4xl font-extrabold md:text-6xl">Seu lore. <span className="text-brand">Sua gente.</span></h1>
             <p className="mt-4 text-lg text-muted-foreground">Registre e avalie jogos, séries e filmes, compartilhe opiniões e encontre pessoas que vibram com as mesmas histórias.</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/feed" className="rounded-lg bg-brand px-6 py-3 font-semibold text-primary-foreground shadow-glow">Abrir protótipo</Link>
-              <Link to="/perfil" className="rounded-lg border border-border bg-card/60 px-6 py-3 font-semibold">Ver um perfil</Link>
+              <Link to="/auth" search={{ redirect: undefined }} className="rounded-lg bg-brand px-6 py-3 font-semibold text-primary-foreground shadow-glow">Criar conta grátis</Link>
+              <Link to="/feed" className="rounded-lg border border-border bg-card/60 px-6 py-3 font-semibold">Já tenho conta</Link>
             </div>
           </div>
         </div>
@@ -56,7 +57,7 @@ function Index() {
               <div key={n} className={`rounded-xl border p-4 ${i === 0 ? "border-primary bg-accent" : "border-border bg-card"}`}>
                 <p className="font-display text-lg font-bold">{n}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{d}</p>
-                {i === 0 && <p className="mt-2 text-xs text-primary">Usado no protótipo</p>}
+                {i === 0 && <p className="mt-2 text-xs text-primary">Nome escolhido</p>}
               </div>
             ))}
           </div>
