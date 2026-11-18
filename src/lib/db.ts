@@ -21,22 +21,36 @@ export const statuses: Record<Kind, string[]> = {
   serie: ["Quero assistir", "Assistindo", "Assistido", "Abandonado"],
   filme: ["Quero assistir", "Assistido", "Abandonado"],
 };
+export const kindPlural: Record<Kind, string> = { jogo: "Jogos", serie: "Séries", filme: "Filmes" };
 export const GENRES = [
   "RPG",
   "Ação",
+  "Aventura",
+  "Tiro",
+  "Corrida",
+  "Esportes",
+  "Estratégia",
+  "Simulação",
+  "Plataforma",
   "Co-op",
   "Roguelike",
-  "Simulação",
   "Metroidvania",
   "Ficção científica",
   "Fantasia",
   "Animação",
+  "Anime",
+  "Super-heróis",
   "Drama",
+  "Comédia",
+  "Romance",
+  "Crime",
   "Suspense",
   "Mistério",
   "Terror",
-  "Comédia",
 ];
+
+/** Below this many titles the spreadsheet catalog hasn't been imported yet. */
+export const SEED_MIN_TITLES = 300;
 
 /** Data type of the success branch of a Supabase response (keeps `null` for maybeSingle). */
 type Ok<R> = R extends { error: null; data: infer D } ? D : never;

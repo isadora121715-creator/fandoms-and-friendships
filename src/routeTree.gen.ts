@@ -15,7 +15,10 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDescobrirRouteImport } from './routes/_authenticated/descobrir'
 import { Route as AuthenticatedExplorarRouteImport } from './routes/_authenticated/explorar'
 import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/feed'
+import { Route as AuthenticatedFilmesRouteImport } from './routes/_authenticated/filmes'
+import { Route as AuthenticatedJogosRouteImport } from './routes/_authenticated/jogos'
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
+import { Route as AuthenticatedSeriesRouteImport } from './routes/_authenticated/series'
 import { Route as AuthenticatedComunidadesIndexRouteImport } from './routes/_authenticated/comunidades.index'
 import { Route as AuthenticatedComunidadesSlugRouteImport } from './routes/_authenticated/comunidades.$slug'
 import { Route as AuthenticatedTituloIdRouteImport } from './routes/_authenticated/titulo.$id'
@@ -50,9 +53,24 @@ const AuthenticatedFeedRoute = AuthenticatedFeedRouteImport.update({
   path: '/feed',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFilmesRoute = AuthenticatedFilmesRouteImport.update({
+  id: '/filmes',
+  path: '/filmes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedJogosRoute = AuthenticatedJogosRouteImport.update({
+  id: '/jogos',
+  path: '/jogos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSeriesRoute = AuthenticatedSeriesRouteImport.update({
+  id: '/series',
+  path: '/series',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedComunidadesIndexRoute =
@@ -84,7 +102,10 @@ export interface FileRoutesByFullPath {
   '/descobrir': typeof AuthenticatedDescobrirRoute
   '/explorar': typeof AuthenticatedExplorarRoute
   '/feed': typeof AuthenticatedFeedRoute
+  '/filmes': typeof AuthenticatedFilmesRoute
+  '/jogos': typeof AuthenticatedJogosRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/series': typeof AuthenticatedSeriesRoute
   '/comunidades/$slug': typeof AuthenticatedComunidadesSlugRoute
   '/titulo/$id': typeof AuthenticatedTituloIdRoute
   '/u/$username': typeof AuthenticatedUUsernameRoute
@@ -96,7 +117,10 @@ export interface FileRoutesByTo {
   '/descobrir': typeof AuthenticatedDescobrirRoute
   '/explorar': typeof AuthenticatedExplorarRoute
   '/feed': typeof AuthenticatedFeedRoute
+  '/filmes': typeof AuthenticatedFilmesRoute
+  '/jogos': typeof AuthenticatedJogosRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/series': typeof AuthenticatedSeriesRoute
   '/comunidades/$slug': typeof AuthenticatedComunidadesSlugRoute
   '/titulo/$id': typeof AuthenticatedTituloIdRoute
   '/u/$username': typeof AuthenticatedUUsernameRoute
@@ -110,7 +134,10 @@ export interface FileRoutesById {
   '/_authenticated/descobrir': typeof AuthenticatedDescobrirRoute
   '/_authenticated/explorar': typeof AuthenticatedExplorarRoute
   '/_authenticated/feed': typeof AuthenticatedFeedRoute
+  '/_authenticated/filmes': typeof AuthenticatedFilmesRoute
+  '/_authenticated/jogos': typeof AuthenticatedJogosRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/series': typeof AuthenticatedSeriesRoute
   '/_authenticated/comunidades/$slug': typeof AuthenticatedComunidadesSlugRoute
   '/_authenticated/titulo/$id': typeof AuthenticatedTituloIdRoute
   '/_authenticated/u/$username': typeof AuthenticatedUUsernameRoute
@@ -124,7 +151,10 @@ export interface FileRouteTypes {
     | '/descobrir'
     | '/explorar'
     | '/feed'
+    | '/filmes'
+    | '/jogos'
     | '/perfil'
+    | '/series'
     | '/comunidades/$slug'
     | '/titulo/$id'
     | '/u/$username'
@@ -136,7 +166,10 @@ export interface FileRouteTypes {
     | '/descobrir'
     | '/explorar'
     | '/feed'
+    | '/filmes'
+    | '/jogos'
     | '/perfil'
+    | '/series'
     | '/comunidades/$slug'
     | '/titulo/$id'
     | '/u/$username'
@@ -149,7 +182,10 @@ export interface FileRouteTypes {
     | '/_authenticated/descobrir'
     | '/_authenticated/explorar'
     | '/_authenticated/feed'
+    | '/_authenticated/filmes'
+    | '/_authenticated/jogos'
     | '/_authenticated/perfil'
+    | '/_authenticated/series'
     | '/_authenticated/comunidades/$slug'
     | '/_authenticated/titulo/$id'
     | '/_authenticated/u/$username'
@@ -206,11 +242,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFeedRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/filmes': {
+      id: '/_authenticated/filmes'
+      path: '/filmes'
+      fullPath: '/filmes'
+      preLoaderRoute: typeof AuthenticatedFilmesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/jogos': {
+      id: '/_authenticated/jogos'
+      path: '/jogos'
+      fullPath: '/jogos'
+      preLoaderRoute: typeof AuthenticatedJogosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/perfil': {
       id: '/_authenticated/perfil'
       path: '/perfil'
       fullPath: '/perfil'
       preLoaderRoute: typeof AuthenticatedPerfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/series': {
+      id: '/_authenticated/series'
+      path: '/series'
+      fullPath: '/series'
+      preLoaderRoute: typeof AuthenticatedSeriesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/comunidades/': {
@@ -248,7 +305,10 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDescobrirRoute: typeof AuthenticatedDescobrirRoute
   AuthenticatedExplorarRoute: typeof AuthenticatedExplorarRoute
   AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
+  AuthenticatedFilmesRoute: typeof AuthenticatedFilmesRoute
+  AuthenticatedJogosRoute: typeof AuthenticatedJogosRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedSeriesRoute: typeof AuthenticatedSeriesRoute
   AuthenticatedComunidadesSlugRoute: typeof AuthenticatedComunidadesSlugRoute
   AuthenticatedTituloIdRoute: typeof AuthenticatedTituloIdRoute
   AuthenticatedUUsernameRoute: typeof AuthenticatedUUsernameRoute
@@ -259,7 +319,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDescobrirRoute: AuthenticatedDescobrirRoute,
   AuthenticatedExplorarRoute: AuthenticatedExplorarRoute,
   AuthenticatedFeedRoute: AuthenticatedFeedRoute,
+  AuthenticatedFilmesRoute: AuthenticatedFilmesRoute,
+  AuthenticatedJogosRoute: AuthenticatedJogosRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedSeriesRoute: AuthenticatedSeriesRoute,
   AuthenticatedComunidadesSlugRoute: AuthenticatedComunidadesSlugRoute,
   AuthenticatedTituloIdRoute: AuthenticatedTituloIdRoute,
   AuthenticatedUUsernameRoute: AuthenticatedUUsernameRoute,

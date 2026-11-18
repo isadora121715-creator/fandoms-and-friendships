@@ -53,7 +53,8 @@ const journey = [
 ];
 const v1 = [
   "Cadastro e perfil com foto, bio e gêneros",
-  "Catálogo de jogos, séries e filmes",
+  "Catálogo com 360+ jogos, séries e filmes",
+  "Busca automática de novos títulos na web",
   "Biblioteca com status, plataforma e episódio",
   "Notas, resenhas e favoritos",
   "Feed com curtidas, comentários, salvos e spoilers",

@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Shell } from "@/components/app/Shell";
 import { Avatar, Poster, Stars } from "@/components/app/bits";
 import { PostCard } from "@/components/app/PostCard";
+import { enrichTitle } from "@/lib/catalog.functions";
 import {
   followingQuery,
   kindLabel,
@@ -53,6 +54,20 @@ function TitlePage() {
     setSeason(entry?.season?.toString() ?? "");
     setEpisode(entry?.episode?.toString() ?? "");
   }, [entry]);
+
+  // Titles imported from the spreadsheets start without a synopsis: fetch it automatically.
+  const needsInfo = !!t && !t.synopsis;
+  useEffect(() => {
+    if (!needsInfo) return;
+    enrichTitle({ data: { id } })
+      .then(() => {
+        qc.invalidateQueries({ queryKey: ["title", id] });
+        qc.invalidateQueries({ queryKey: ["titles"] });
+      })
+      .catch(() => {
+        /* keeps the placeholder; will retry on the next visit */
+      });
+  }, [needsInfo, id, qc]);
 
   const save = useMutation({
     mutationFn: async (patch: Record<string, unknown>) => {
@@ -132,7 +147,8 @@ function TitlePage() {
         <Poster t={t} showName={false} className="w-36 md:w-full" />
         <div>
           <p className="text-sm text-primary">
-            {kindLabel[kind]} · {t.year}
+            {kindLabel[kind]}
+            {t.year > 0 ? ` · ${t.year}` : ""}
           </p>
           <h1 className="text-3xl font-extrabold md:text-5xl">{t.name}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -151,7 +167,11 @@ function TitlePage() {
               <span className="text-muted-foreground">Ainda sem notas</span>
             )}
           </div>
-          <p className="mt-4 max-w-2xl leading-relaxed">{t.synopsis}</p>
+          <p className="mt-4 max-w-2xl leading-relaxed">
+            {t.synopsis || (
+              <span className="text-muted-foreground">Buscando sinopse na Wikipédia…</span>
+            )}
+          </p>
 
           <div className="mt-6 rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between">

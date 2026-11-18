@@ -126,7 +126,8 @@ export function Poster({
         <div className="absolute inset-x-0 bottom-0 bg-fade p-2 pt-8">
           <p className="font-display text-sm font-bold leading-tight">{t.name}</p>
           <p className="text-[11px] text-muted-foreground">
-            {kindLabel[t.kind as Kind]} · {t.year}
+            {kindLabel[t.kind as Kind]}
+            {t.year > 0 ? ` · ${t.year}` : ""}
           </p>
         </div>
       )}

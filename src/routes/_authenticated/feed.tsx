@@ -11,12 +11,14 @@ import { toast } from "sonner";
 import {
   feedQuery,
   GENRES,
+  kindPlural,
   libraryQuery,
   meQuery,
   recommendFor,
   recsQuery,
   suggestionsQuery,
   titlesQuery,
+  type Kind,
   type Profile,
 } from "@/lib/db";
 
@@ -36,7 +38,9 @@ export const Route = createFileRoute("/_authenticated/feed")({
 function Feed() {
   const { data: me } = useSuspenseQuery(meQuery);
   const [scope, setScope] = useState<"seguindo" | "todos">("todos");
+  const [kind, setKind] = useState<Kind | "all">("all");
   const { data: posts, isLoading } = useQuery(feedQuery(scope, me.id));
+  const shown = posts?.filter((p) => kind === "all" || p.titles?.kind === kind);
   const { data: sugg } = useQuery(suggestionsQuery(me.id));
   const { data: titles } = useQuery(titlesQuery);
   const { data: lib } = useQuery(libraryQuery(me.id));
@@ -58,8 +62,24 @@ function Feed() {
                 {s === "todos" ? "Todos" : "Seguindo"}
               </button>
             ))}
+            <span className="mx-1 w-px self-stretch bg-border" />
+            {(["all", "jogo", "serie", "filme"] as const).map((k) => (
+              <button
+                key={k}
+                onClick={() => setKind(k)}
+                className={`rounded-full px-3 py-1.5 text-xs ${kind === k ? "bg-accent font-semibold text-foreground" : "text-muted-foreground"}`}
+              >
+                {k === "all" ? "Tudo" : kindPlural[k]}
+              </button>
+            ))}
           </div>
           {isLoading && <p className="text-sm text-muted-foreground">Carregando…</p>}
+          {posts && posts.length > 0 && shown?.length === 0 && (
+            <p className="text-sm text-muted-foreground">
+              Nenhuma publicação sobre {kind === "all" ? "títulos" : kindPlural[kind].toLowerCase()}{" "}
+              por aqui ainda.
+            </p>
+          )}
           {posts?.length === 0 && (
             <div className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
               Nada por aqui ainda. Publique algo ou{" "}
@@ -69,7 +89,7 @@ function Feed() {
               .
             </div>
           )}
-          {posts?.map((p) => (
+          {shown?.map((p) => (
             <PostCard key={p.id} p={p} meId={me.id} />
           ))}
         </div>
