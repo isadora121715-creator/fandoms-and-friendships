@@ -5,29 +5,158 @@ import { cn } from "@/lib/utils";
 
 const icon: Record<Kind, typeof Film> = { jogo: Gamepad2, serie: Tv, filme: Film };
 
-// Poster art is generated from each title's hue (data-driven, not a theme color).
-export function Poster({ t, className, showName = true }: { t: Pick<Title, "id" | "kind" | "name" | "year" | "hue">; className?: string; showName?: boolean }) {
+/**
+ * Deterministic cover art, generated per title from its id/kind/hue — never a real
+ * poster or box-art image. Real cover art for these titles is copyrighted, so instead
+ * each title gets a unique, original abstract illustration: layered shapes whose style
+ * (rings, stripes, grid, triangles) is picked from a hash of the id, tinted with the
+ * title's hue, with the kind's icon as a large watermark. Same id always renders the
+ * same way, so a title's "cover" stays stable across the app.
+ */
+function hashSeed(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return h;
+}
+
+function CoverArt({ id, kind, hue }: { id: string; kind: Kind; hue: number }) {
+  const seed = hashSeed(id);
+  const variant = seed % 4;
+  const Icon = icon[kind];
+  const c1 = `oklch(0.62 0.19 ${hue})`;
+  const c2 = `oklch(0.3 0.1 ${(hue + 50) % 360})`;
+  const c3 = `oklch(0.78 0.14 ${(hue + 190) % 360})`;
+  return (
+    <svg
+      viewBox="0 0 200 300"
+      preserveAspectRatio="xMidYMid slice"
+      className="absolute inset-0 h-full w-full"
+      aria-hidden
+    >
+      <defs>
+        <radialGradient id={`bg-${id}`} cx="35%" cy="25%" r="85%">
+          <stop offset="0%" stopColor={c1} />
+          <stop offset="100%" stopColor={c2} />
+        </radialGradient>
+      </defs>
+      <rect width="200" height="300" fill={`url(#bg-${id})`} />
+      {variant === 0 && (
+        <g opacity={0.35} stroke={c3} strokeWidth={2} fill="none">
+          {[0, 1, 2, 3].map((i) => (
+            <circle
+              key={i}
+              cx={40 + ((seed + i * 37) % 120)}
+              cy={60 + ((seed + i * 53) % 180)}
+              r={18 + i * 14}
+            />
+          ))}
+        </g>
+      )}
+      {variant === 1 && (
+        <g opacity={0.3} stroke={c3} strokeWidth={6}>
+          {[0, 1, 2, 3, 4].map((i) => (
+            <line
+              key={i}
+              x1={-20}
+              y1={i * 55 + (seed % 40)}
+              x2={220}
+              y2={i * 55 - 60 + (seed % 40)}
+            />
+          ))}
+        </g>
+      )}
+      {variant === 2 && (
+        <g opacity={0.3} fill={c3}>
+          {Array.from({ length: 24 }, (_, i) => i).map((i) => {
+            const col = i % 6,
+              row = Math.floor(i / 6);
+            const on = (seed >> i) & 1;
+            return on ? (
+              <rect key={i} x={10 + col * 32} y={20 + row * 32} width={18} height={18} rx={3} />
+            ) : null;
+          })}
+        </g>
+      )}
+      {variant === 3 && (
+        <g opacity={0.3} fill={c3}>
+          {[0, 1, 2].map((i) => {
+            const x = 30 + ((seed + i * 61) % 140);
+            const y = 40 + ((seed + i * 83) % 220);
+            const s = 24 + i * 10;
+            return <polygon key={i} points={`${x},${y - s} ${x + s},${y + s} ${x - s},${y + s}`} />;
+          })}
+        </g>
+      )}
+      <Icon
+        x={200 / 2 - 44}
+        y={300 / 2 - 44}
+        width={88}
+        height={88}
+        color="white"
+        opacity={0.16}
+        strokeWidth={1.5}
+      />
+    </svg>
+  );
+}
+
+// Poster art is generated per title (id/kind/hue), not a real cover image — see CoverArt above.
+export function Poster({
+  t,
+  className,
+  showName = true,
+}: {
+  t: Pick<Title, "id" | "kind" | "name" | "year" | "hue">;
+  className?: string;
+  showName?: boolean;
+}) {
   const Icon = icon[t.kind as Kind];
   return (
-    <Link to="/titulo/$id" params={{ id: t.id }} className={cn("group relative block aspect-[2/3] overflow-hidden rounded-lg border border-border transition hover:-translate-y-1 hover:shadow-glow", className)}
-      style={{ background: `radial-gradient(circle at 30% 20%, oklch(0.6 0.18 ${t.hue}), oklch(0.25 0.08 ${t.hue + 40}) 70%)` }}>
+    <Link
+      to="/titulo/$id"
+      params={{ id: t.id }}
+      className={cn(
+        "group relative block aspect-[2/3] overflow-hidden rounded-lg border border-border transition hover:-translate-y-1 hover:shadow-glow",
+        className,
+      )}
+    >
+      <CoverArt id={t.id} kind={t.kind as Kind} hue={t.hue} />
       <Icon className="absolute right-2 top-2 h-4 w-4 text-foreground/70" />
       {showName && (
         <div className="absolute inset-x-0 bottom-0 bg-fade p-2 pt-8">
           <p className="font-display text-sm font-bold leading-tight">{t.name}</p>
-          <p className="text-[11px] text-muted-foreground">{kindLabel[t.kind as Kind]} · {t.year}</p>
+          <p className="text-[11px] text-muted-foreground">
+            {kindLabel[t.kind as Kind]} · {t.year}
+          </p>
         </div>
       )}
     </Link>
   );
 }
 
-export function Stars({ value, size = 14, onChange }: { value: number; size?: number; onChange?: (v: number) => void }) {
+export function Stars({
+  value,
+  size = 14,
+  onChange,
+}: {
+  value: number;
+  size?: number;
+  onChange?: (v: number) => void;
+}) {
   return (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((i) => (
-        <button key={i} type="button" disabled={!onChange} onClick={() => onChange?.(i)} aria-label={`${i} estrelas`}>
-          <Star style={{ width: size, height: size }} className={i <= Math.round(value) ? "fill-star text-star" : "text-muted-foreground/40"} />
+        <button
+          key={i}
+          type="button"
+          disabled={!onChange}
+          onClick={() => onChange?.(i)}
+          aria-label={`${i} estrelas`}
+        >
+          <Star
+            style={{ width: size, height: size }}
+            className={i <= Math.round(value) ? "fill-star text-star" : "text-muted-foreground/40"}
+          />
         </button>
       ))}
     </div>
@@ -36,8 +165,15 @@ export function Stars({ value, size = 14, onChange }: { value: number; size?: nu
 
 export function Avatar({ name, hue, size = 40 }: { name: string; hue: number; size?: number }) {
   return (
-    <div className="grid shrink-0 place-items-center rounded-full font-display font-bold ring-2 ring-primary/40"
-      style={{ width: size, height: size, fontSize: size * 0.4, background: `linear-gradient(135deg, oklch(0.6 0.2 ${hue}), oklch(0.45 0.15 ${hue + 60}))` }}>
+    <div
+      className="grid shrink-0 place-items-center rounded-full font-display font-bold ring-2 ring-primary/40"
+      style={{
+        width: size,
+        height: size,
+        fontSize: size * 0.4,
+        background: `linear-gradient(135deg, oklch(0.6 0.2 ${hue}), oklch(0.45 0.15 ${hue + 60}))`,
+      }}
+    >
       {name[0]}
     </div>
   );

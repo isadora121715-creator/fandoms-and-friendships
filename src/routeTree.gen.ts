@@ -16,6 +16,8 @@ import { Route as AuthenticatedDescobrirRouteImport } from './routes/_authentica
 import { Route as AuthenticatedExplorarRouteImport } from './routes/_authenticated/explorar'
 import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/feed'
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
+import { Route as AuthenticatedComunidadesIndexRouteImport } from './routes/_authenticated/comunidades.index'
+import { Route as AuthenticatedComunidadesSlugRouteImport } from './routes/_authenticated/comunidades.$slug'
 import { Route as AuthenticatedTituloIdRouteImport } from './routes/_authenticated/titulo.$id'
 import { Route as AuthenticatedUUsernameRouteImport } from './routes/_authenticated/u.$username'
 
@@ -53,6 +55,18 @@ const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
   path: '/perfil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedComunidadesIndexRoute =
+  AuthenticatedComunidadesIndexRouteImport.update({
+    id: '/comunidades/',
+    path: '/comunidades/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedComunidadesSlugRoute =
+  AuthenticatedComunidadesSlugRouteImport.update({
+    id: '/comunidades/$slug',
+    path: '/comunidades/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTituloIdRoute = AuthenticatedTituloIdRouteImport.update({
   id: '/titulo/$id',
   path: '/titulo/$id',
@@ -71,8 +85,10 @@ export interface FileRoutesByFullPath {
   '/explorar': typeof AuthenticatedExplorarRoute
   '/feed': typeof AuthenticatedFeedRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/comunidades/$slug': typeof AuthenticatedComunidadesSlugRoute
   '/titulo/$id': typeof AuthenticatedTituloIdRoute
   '/u/$username': typeof AuthenticatedUUsernameRoute
+  '/comunidades/': typeof AuthenticatedComunidadesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -81,8 +97,10 @@ export interface FileRoutesByTo {
   '/explorar': typeof AuthenticatedExplorarRoute
   '/feed': typeof AuthenticatedFeedRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/comunidades/$slug': typeof AuthenticatedComunidadesSlugRoute
   '/titulo/$id': typeof AuthenticatedTituloIdRoute
   '/u/$username': typeof AuthenticatedUUsernameRoute
+  '/comunidades': typeof AuthenticatedComunidadesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -93,8 +111,10 @@ export interface FileRoutesById {
   '/_authenticated/explorar': typeof AuthenticatedExplorarRoute
   '/_authenticated/feed': typeof AuthenticatedFeedRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/comunidades/$slug': typeof AuthenticatedComunidadesSlugRoute
   '/_authenticated/titulo/$id': typeof AuthenticatedTituloIdRoute
   '/_authenticated/u/$username': typeof AuthenticatedUUsernameRoute
+  '/_authenticated/comunidades/': typeof AuthenticatedComunidadesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -105,8 +125,10 @@ export interface FileRouteTypes {
     | '/explorar'
     | '/feed'
     | '/perfil'
+    | '/comunidades/$slug'
     | '/titulo/$id'
     | '/u/$username'
+    | '/comunidades/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -115,8 +137,10 @@ export interface FileRouteTypes {
     | '/explorar'
     | '/feed'
     | '/perfil'
+    | '/comunidades/$slug'
     | '/titulo/$id'
     | '/u/$username'
+    | '/comunidades'
   id:
     | '__root__'
     | '/'
@@ -126,8 +150,10 @@ export interface FileRouteTypes {
     | '/_authenticated/explorar'
     | '/_authenticated/feed'
     | '/_authenticated/perfil'
+    | '/_authenticated/comunidades/$slug'
     | '/_authenticated/titulo/$id'
     | '/_authenticated/u/$username'
+    | '/_authenticated/comunidades/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -187,6 +213,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPerfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/comunidades/': {
+      id: '/_authenticated/comunidades/'
+      path: '/comunidades'
+      fullPath: '/comunidades/'
+      preLoaderRoute: typeof AuthenticatedComunidadesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/comunidades/$slug': {
+      id: '/_authenticated/comunidades/$slug'
+      path: '/comunidades/$slug'
+      fullPath: '/comunidades/$slug'
+      preLoaderRoute: typeof AuthenticatedComunidadesSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/titulo/$id': {
       id: '/_authenticated/titulo/$id'
       path: '/titulo/$id'
@@ -209,8 +249,10 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedExplorarRoute: typeof AuthenticatedExplorarRoute
   AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedComunidadesSlugRoute: typeof AuthenticatedComunidadesSlugRoute
   AuthenticatedTituloIdRoute: typeof AuthenticatedTituloIdRoute
   AuthenticatedUUsernameRoute: typeof AuthenticatedUUsernameRoute
+  AuthenticatedComunidadesIndexRoute: typeof AuthenticatedComunidadesIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -218,8 +260,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedExplorarRoute: AuthenticatedExplorarRoute,
   AuthenticatedFeedRoute: AuthenticatedFeedRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedComunidadesSlugRoute: AuthenticatedComunidadesSlugRoute,
   AuthenticatedTituloIdRoute: AuthenticatedTituloIdRoute,
   AuthenticatedUUsernameRoute: AuthenticatedUUsernameRoute,
+  AuthenticatedComunidadesIndexRoute: AuthenticatedComunidadesIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
