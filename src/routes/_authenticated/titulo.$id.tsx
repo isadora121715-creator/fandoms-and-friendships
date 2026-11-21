@@ -5,7 +5,7 @@ import { Heart, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Shell } from "@/components/app/Shell";
-import { Avatar, Poster, Stars } from "@/components/app/bits";
+import { Avatar, CoverImage, Poster, Stars } from "@/components/app/bits";
 import { PostCard } from "@/components/app/PostCard";
 import { enrichTitle } from "@/lib/catalog.functions";
 import {
@@ -141,6 +141,7 @@ function TitlePage() {
           background: `radial-gradient(circle at 70% 30%, oklch(0.5 0.18 ${t.hue}), transparent 70%)`,
         }}
       >
+        <CoverImage id={t.id} alt="" className="scale-110 opacity-40 blur-2xl" />
         <div className="absolute inset-0 bg-fade" />
       </div>
       <div className="relative -mt-40 grid gap-6 md:grid-cols-[200px_1fr]">

@@ -131,6 +131,125 @@ async function wikiSummary(pageTitle: string) {
   return { title: s.title, description: s.description ?? "", extract: s.extract ?? "" };
 }
 
+const EN_KIND_RE: Record<Kind, RegExp> = {
+  jogo: /video game|game\b/i,
+  serie:
+    /television series|tv series|web series|anime|sitcom|miniseries|drama series|animated series/i,
+  filme: /\bfilm\b|movie/i,
+};
+const EN_HINT: Record<Kind, string> = { jogo: "video game", serie: "TV series", filme: "film" };
+
+async function wikiApi(host: "pt" | "en", params: Record<string, string>) {
+  const url = new URL(`https://${host}.wikipedia.org/w/api.php`);
+  Object.entries({ format: "json", formatversion: "2", ...params }).forEach(([k, v]) =>
+    url.searchParams.set(k, v),
+  );
+  const res = await fetch(url, { headers: UA });
+  const text = await res.text();
+  if (!res.ok || !text.startsWith("{")) return null;
+  return JSON.parse(text) as {
+    query?: {
+      pages?: {
+        title: string;
+        index?: number;
+        description?: string;
+        pageprops?: object;
+        thumbnail?: { source: string };
+        langlinks?: { title: string }[];
+      }[];
+    };
+  };
+}
+
+async function searchPages(host: "pt" | "en", q: string) {
+  const r = await wikiApi(host, {
+    action: "query",
+    generator: "search",
+    gsrsearch: q,
+    gsrlimit: "8",
+    prop: "description|pageprops",
+    ppprop: "disambiguation",
+    redirects: "1",
+  });
+  return (r?.query?.pages ?? [])
+    .filter((p) => !p.pageprops)
+    .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))
+    .map((p) => ({ title: p.title, description: p.description ?? "" }));
+}
+
+async function pageImage(host: "pt" | "en", title: string) {
+  const r = await wikiApi(host, {
+    action: "query",
+    titles: title,
+    redirects: "1",
+    prop: "pageimages|langlinks",
+    pilicense: "any",
+    piprop: "thumbnail",
+    pithumbsize: "500",
+    lllang: "en",
+  });
+  const p = r?.query?.pages?.[0];
+  return {
+    thumb: p?.thumbnail?.source.split("?")[0] ?? null,
+    en: p?.langlinks?.[0]?.title ?? null,
+  };
+}
+
+function pickPage(
+  pages: { title: string; description: string }[],
+  t: { name: string; year: number },
+  re: RegExp,
+) {
+  const norm = slugify(t.name);
+  const short = slugify(t.name.split(":")[0]!);
+  const m = pages.filter((p) => re.test(p.description));
+  const same = (p: { title: string }, n: string) => slugify(cleanName(p.title)) === n;
+  const yOk = (p: { description: string }) =>
+    !t.year || !yearFrom(p.description) || yearFrom(p.description) === t.year;
+  return (
+    m.find((p) => same(p, norm) && yOk(p)) ??
+    m.find((p) => same(p, norm)) ??
+    m.find((p) => same(p, short) && yOk(p)) ??
+    m.find((p) => slugify(cleanName(p.title)).startsWith(norm) && yOk(p)) ??
+    null
+  );
+}
+
+/** Poster / box art for a title: the English Wikipedia infobox image, else the Portuguese one. */
+async function findCover(t: { name: string; kind: Kind; year: number }) {
+  const pt = pickPage(await searchPages("pt", `${t.name} ${HINT[t.kind]}`), t, KIND_RE[t.kind]);
+  if (pt) {
+    const pi = await pageImage("pt", pt.title);
+    if (pi.en) {
+      const ei = await pageImage("en", pi.en);
+      if (ei.thumb) return ei.thumb;
+    }
+    if (pi.thumb) return pi.thumb;
+  }
+  const en = pickPage(
+    await searchPages("en", `${t.name} ${EN_HINT[t.kind]}`),
+    t,
+    EN_KIND_RE[t.kind],
+  );
+  return en ? (await pageImage("en", en.title)).thumb : null;
+}
+
+/** Looks up the cover image of a title that isn't in the pre-generated image map. */
+export const titleCover = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((d: unknown) => z.object({ id: z.string().min(1).max(200) }).parse(d))
+  .handler(async ({ data, context }) => {
+    const t = (
+      await context.supabase
+        .from("titles")
+        .select("name, kind, year")
+        .eq("id", data.id)
+        .maybeSingle()
+    ).data;
+    if (!t) return { url: null };
+    return { url: await findCover({ name: t.name, kind: t.kind as Kind, year: t.year }) };
+  });
+
 const trimSynopsis = (s: string) => (s.length > 700 ? s.slice(0, 697).trimEnd() + "…" : s);
 
 /** Upserts the spreadsheet catalog. Idempotent: existing titles are left untouched. */

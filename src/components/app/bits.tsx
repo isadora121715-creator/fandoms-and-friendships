@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { Star, Gamepad2, Tv, Film } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { type Title, type Kind, kindLabel } from "@/lib/db";
 import { cn } from "@/lib/utils";
+import { useCover } from "./useCover";
 
 const icon: Record<Kind, typeof Film> = { jogo: Gamepad2, serie: Tv, filme: Film };
 
@@ -100,7 +102,60 @@ function CoverArt({ id, kind, hue }: { id: string; kind: Kind; hue: number }) {
   );
 }
 
-// Poster art is generated per title (id/kind/hue), not a real cover image — see CoverArt above.
+/** Real cover image (from Wikipedia) over the generated art, which stays as the fallback. */
+export function CoverImage({
+  id,
+  alt,
+  className,
+}: {
+  id: string;
+  alt: string;
+  className?: string;
+}) {
+  const url = useCover(id);
+  // Remount per URL so the failed/wide state never carries over to another image.
+  return url ? <CoverImg key={url} url={url} alt={alt} className={className} /> : null;
+}
+
+function CoverImg({
+  url,
+  alt,
+  className,
+}: {
+  url: string;
+  alt: string;
+  className?: string | undefined;
+}) {
+  const ref = useRef<HTMLImageElement>(null);
+  const [failed, setFailed] = useState(false);
+  // Some series only have a logo / title card (not a vertical poster): show it whole, uncropped.
+  const [wide, setWide] = useState(false);
+  const measure = (img: HTMLImageElement) =>
+    img.naturalWidth > 0 && setWide(img.naturalWidth > img.naturalHeight * 0.95);
+  // A cached image can finish loading before hydration, when onLoad has no listener yet.
+  useEffect(() => {
+    if (ref.current?.complete) measure(ref.current);
+  }, []);
+  if (failed) return null;
+  return (
+    <img
+      ref={ref}
+      src={url}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      referrerPolicy="no-referrer"
+      onError={() => setFailed(true)}
+      onLoad={(e) => measure(e.currentTarget)}
+      className={cn(
+        "absolute inset-0 h-full w-full",
+        wide ? "object-contain p-3 drop-shadow-lg" : "object-cover",
+        className,
+      )}
+    />
+  );
+}
+
 export function Poster({
   t,
   className,
@@ -121,7 +176,10 @@ export function Poster({
       )}
     >
       <CoverArt id={t.id} kind={t.kind as Kind} hue={t.hue} />
-      <Icon className="absolute right-2 top-2 h-4 w-4 text-foreground/70" />
+      <CoverImage id={t.id} alt={`Capa de ${t.name}`} />
+      <span className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full bg-background/70 backdrop-blur">
+        <Icon className="h-3.5 w-3.5 text-foreground/80" />
+      </span>
       {showName && (
         <div className="absolute inset-x-0 bottom-0 bg-fade p-2 pt-8">
           <p className="font-display text-sm font-bold leading-tight">{t.name}</p>
