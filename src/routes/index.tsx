@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import hero from "@/assets/hero.jpg";
 import { Logo } from "@/components/app/Shell";
 import { Footer } from "@/components/app/Footer";
+import { AppearanceMenu, WallpaperLayer } from "@/components/app/Appearance";
 import { Poster } from "@/components/app/bits";
 import { titles } from "@/lib/mock";
 // Landing poster strip uses static sample titles so the public page needs no sign-in.
@@ -67,6 +68,7 @@ const v1 = [
 function Index() {
   return (
     <div>
+      <WallpaperLayer />
       <section className="relative overflow-hidden">
         <img
           src={hero}
@@ -77,7 +79,10 @@ function Index() {
         />
         <div className="absolute inset-0 bg-fade" />
         <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-6">
-          <Logo />
+          <div className="flex items-center justify-between">
+            <Logo />
+            <AppearanceMenu />
+          </div>
           <div className="max-w-2xl pt-24 md:pt-36">
             <h1 className="text-4xl font-extrabold md:text-6xl">
               Seu lore. <span className="text-brand">Sua gente.</span>

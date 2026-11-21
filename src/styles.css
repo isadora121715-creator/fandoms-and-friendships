@@ -10,6 +10,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant light (&:is(.light *));
 
 /*
  * Design system definition.
@@ -75,44 +76,99 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/*
+ * Palette inspired by classic TV-tracking apps: charcoal backgrounds, a vivid yellow
+ * highlight with dark text on it, and posters front and center. :root is the dark
+ * theme (default); html.light overrides it. Toggle lives in src/lib/prefs.ts.
+ */
 :root {
-  --radius: 0.875rem;
-  --background: oklch(0.16 0.012 270);
-  --foreground: oklch(0.96 0.01 270);
-  --card: oklch(0.205 0.015 270);
-  --card-foreground: oklch(0.96 0.01 270);
-  --popover: oklch(0.22 0.016 270);
-  --popover-foreground: oklch(0.96 0.01 270);
-  --primary: oklch(0.65 0.22 295);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.65 0.17 250);
-  --secondary-foreground: oklch(0.99 0 0);
-  --muted: oklch(0.25 0.015 270);
-  --muted-foreground: oklch(0.7 0.02 270);
-  --accent: oklch(0.28 0.04 285);
-  --accent-foreground: oklch(0.96 0.01 270);
-  --destructive: oklch(0.62 0.22 25);
+  --radius: 0.75rem;
+  --background: oklch(0.145 0.004 260);
+  --foreground: oklch(0.97 0.003 260);
+  --card: oklch(0.195 0.005 260);
+  --card-foreground: oklch(0.97 0.003 260);
+  --popover: oklch(0.21 0.006 260);
+  --popover-foreground: oklch(0.97 0.003 260);
+  --primary: oklch(0.87 0.17 95);
+  --primary-foreground: oklch(0.17 0.01 260);
+  --secondary: oklch(0.72 0.16 45);
+  --secondary-foreground: oklch(0.17 0.01 260);
+  --muted: oklch(0.24 0.006 260);
+  --muted-foreground: oklch(0.72 0.01 260);
+  --accent: oklch(0.27 0.02 95);
+  --accent-foreground: oklch(0.97 0.003 260);
+  --destructive: oklch(0.63 0.21 25);
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(1 0 0 / 9%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.65 0.22 295);
-  --star: oklch(0.82 0.16 85);
-  --gradient-brand: linear-gradient(120deg, oklch(0.65 0.22 295), oklch(0.65 0.17 250));
-  --gradient-fade: linear-gradient(to top, oklch(0.16 0.012 270) 10%, oklch(0.16 0.012 270 / 0.6) 50%, transparent);
-  --shadow-glow: 0 10px 40px -10px oklch(0.65 0.22 295 / 0.55);
-  --chart-1: oklch(0.65 0.22 295);
-  --chart-2: oklch(0.65 0.17 250);
+  --input: oklch(1 0 0 / 13%);
+  --ring: oklch(0.87 0.17 95);
+  --star: oklch(0.87 0.17 95);
+  --gradient-brand: linear-gradient(120deg, oklch(0.9 0.17 100), oklch(0.8 0.17 75));
+  --gradient-fade: linear-gradient(
+    to top,
+    var(--background) 10%,
+    color-mix(in oklch, var(--background) 60%, transparent) 50%,
+    transparent
+  );
+  --shadow-glow: 0 10px 36px -12px oklch(0.87 0.17 95 / 0.45);
+  --chart-1: oklch(0.87 0.17 95);
+  --chart-2: oklch(0.72 0.16 45);
   --chart-3: oklch(0.7 0.15 200);
-  --chart-4: oklch(0.82 0.16 85);
-  --chart-5: oklch(0.62 0.22 25);
-  --sidebar: oklch(0.18 0.013 270);
-  --sidebar-foreground: oklch(0.96 0.01 270);
-  --sidebar-primary: oklch(0.65 0.22 295);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.25 0.015 270);
-  --sidebar-accent-foreground: oklch(0.96 0.01 270);
+  --chart-4: oklch(0.65 0.2 300);
+  --chart-5: oklch(0.63 0.21 25);
+  --sidebar: oklch(0.17 0.005 260);
+  --sidebar-foreground: oklch(0.97 0.003 260);
+  --sidebar-primary: oklch(0.87 0.17 95);
+  --sidebar-primary-foreground: oklch(0.17 0.01 260);
+  --sidebar-accent: oklch(0.24 0.006 260);
+  --sidebar-accent-foreground: oklch(0.97 0.003 260);
   --sidebar-border: oklch(1 0 0 / 9%);
-  --sidebar-ring: oklch(0.65 0.22 295);
+  --sidebar-ring: oklch(0.87 0.17 95);
+  color-scheme: dark;
+}
+
+html.light {
+  --background: oklch(0.975 0.004 95);
+  --foreground: oklch(0.2 0.01 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.01 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.01 260);
+  /* deeper gold so it still reads as text on white */
+  --primary: oklch(0.66 0.15 75);
+  --primary-foreground: oklch(0.17 0.01 260);
+  --secondary: oklch(0.6 0.17 40);
+  --secondary-foreground: oklch(0.99 0 0);
+  --muted: oklch(0.93 0.006 95);
+  --muted-foreground: oklch(0.47 0.01 260);
+  --accent: oklch(0.94 0.05 95);
+  --accent-foreground: oklch(0.2 0.01 260);
+  --border: oklch(0 0 0 / 10%);
+  --input: oklch(0 0 0 / 14%);
+  --ring: oklch(0.66 0.15 75);
+  --star: oklch(0.74 0.16 80);
+  --gradient-brand: linear-gradient(120deg, oklch(0.86 0.17 95), oklch(0.76 0.17 70));
+  /* gradient text needs more contrast on white */
+  --gradient-text: linear-gradient(120deg, oklch(0.7 0.16 78), oklch(0.6 0.17 55));
+  --shadow-glow: 0 10px 30px -14px oklch(0.6 0.15 75 / 0.55);
+  --sidebar: oklch(0.96 0.004 95);
+  --sidebar-foreground: oklch(0.2 0.01 260);
+  --sidebar-accent: oklch(0.93 0.006 95);
+  --sidebar-accent-foreground: oklch(0.2 0.01 260);
+  --sidebar-border: oklch(0 0 0 / 10%);
+  color-scheme: light;
+}
+
+/* With a wallpaper on, surfaces turn slightly see-through and blur what is behind them. */
+html.has-wallpaper {
+  --card: color-mix(in oklch, var(--card-solid, oklch(0.195 0.005 260)) 82%, transparent);
+}
+html.light.has-wallpaper {
+  --card: color-mix(in oklch, oklch(1 0 0) 84%, transparent);
+}
+html.has-wallpaper .bg-card {
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 
 @layer base {
@@ -126,14 +182,30 @@
   }
 }
 
-@utility bg-brand { background-image: var(--gradient-brand); }
-@utility bg-fade { background-image: var(--gradient-fade); }
-@utility shadow-glow { box-shadow: var(--shadow-glow); }
-@utility text-brand {
+@utility bg-brand {
   background-image: var(--gradient-brand);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+@utility bg-fade {
+  background-image: var(--gradient-fade);
+}
+@utility shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+@utility text-brand {
+  background-image: var(--gradient-text, var(--gradient-brand));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 @layer base {
-  body { font-family: var(--font-sans); }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  body {
+    font-family: var(--font-sans);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
 }

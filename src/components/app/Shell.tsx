@@ -7,6 +7,7 @@ import { meQuery, SEED_MIN_TITLES, titlesQuery } from "@/lib/db";
 import { seedCatalog } from "@/lib/catalog.functions";
 import { Avatar } from "./bits";
 import { Footer } from "./Footer";
+import { AppearanceMenu, WallpaperLayer } from "./Appearance";
 
 const main = [
   { to: "/feed", label: "Feed", icon: Home },
@@ -61,7 +62,8 @@ export function Shell({ children }: { children: ReactNode }) {
     "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground";
   return (
     <div className="min-h-screen pb-20 md:pb-0">
-      <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
+      <WallpaperLayer />
+      <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4">
           <Logo />
           <nav className="hidden items-center gap-1 md:flex">
@@ -70,7 +72,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 key={n.to}
                 to={n.to}
                 className={linkCls}
-                activeProps={{ className: "bg-accent text-foreground" }}
+                activeProps={{ className: "bg-primary font-semibold !text-primary-foreground" }}
               >
                 <n.icon className="h-4 w-4" />
                 {n.label}
@@ -82,7 +84,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 key={n.to}
                 to={n.to}
                 className={linkCls}
-                activeProps={{ className: "bg-accent text-foreground" }}
+                activeProps={{ className: "bg-primary font-semibold !text-primary-foreground" }}
               >
                 <n.icon className="h-4 w-4" />
                 <span className="hidden lg:inline">{n.label}</span>
@@ -109,6 +111,7 @@ export function Shell({ children }: { children: ReactNode }) {
             >
               <Search className="h-5 w-5 md:h-4 md:w-4" />
             </Link>
+            <AppearanceMenu />
             {me && (
               <Link to="/perfil" className="hidden items-center gap-2 text-sm md:flex">
                 <Avatar name={me.display_name} hue={me.avatar_hue} size={28} />

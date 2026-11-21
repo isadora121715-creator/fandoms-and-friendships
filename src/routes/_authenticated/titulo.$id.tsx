@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Heart, Send, Trash2 } from "lucide-react";
+import { Heart, Send, Trash2, Wallpaper } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Shell } from "@/components/app/Shell";
 import { Avatar, CoverImage, Poster, Stars } from "@/components/app/bits";
 import { PostCard } from "@/components/app/PostCard";
 import { enrichTitle } from "@/lib/catalog.functions";
+import { setWallpaper, useWallpaper } from "@/lib/prefs";
 import {
   followingQuery,
   kindLabel,
@@ -48,6 +49,7 @@ function TitlePage() {
   const [review, setReview] = useState("");
   const [spoiler, setSpoiler] = useState(false);
   const [rec, setRec] = useState(false);
+  const wallpaper = useWallpaper();
   const [season, setSeason] = useState("");
   const [episode, setEpisode] = useState("");
   useEffect(() => {
@@ -251,6 +253,17 @@ function TitlePage() {
               >
                 <Send className="h-4 w-4" />
                 Recomendar
+              </button>
+              <button
+                onClick={() => {
+                  const on = wallpaper === id;
+                  setWallpaper(on ? null : id);
+                  toast(on ? "Papel de parede removido" : `${t.name} agora é seu papel de parede`);
+                }}
+                className={`flex items-center gap-1 text-sm ${wallpaper === id ? "text-primary" : "text-muted-foreground"}`}
+              >
+                <Wallpaper className="h-4 w-4" />
+                {wallpaper === id ? "Remover papel de parede" : "Usar como papel de parede"}
               </button>
             </div>
             <form

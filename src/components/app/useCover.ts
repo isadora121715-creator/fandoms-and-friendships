@@ -28,7 +28,7 @@ export function useCover(id: string): string | null {
   const known = id in TITLE_IMAGES;
   const { data } = useQuery({
     queryKey: ["cover", id],
-    enabled: !known,
+    enabled: !!id && !known,
     staleTime: Infinity,
     gcTime: Infinity,
     retry: false,

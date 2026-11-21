@@ -7,6 +7,7 @@ import { Shell } from "@/components/app/Shell";
 import { Avatar, Poster } from "@/components/app/bits";
 import { PostCard } from "@/components/app/PostCard";
 import { Composer } from "@/components/app/Composer";
+import { ContinueWatching } from "@/components/app/ContinueWatching";
 import { toast } from "sonner";
 import {
   feedQuery,
@@ -51,6 +52,7 @@ function Feed() {
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="space-y-4">
           {me.genres.length === 0 && <Welcome me={me} libCount={lib?.length ?? 0} />}
+          <ContinueWatching userId={me.id} />
           <Composer me={me} />
           <div className="flex gap-2">
             {(["todos", "seguindo"] as const).map((s) => (
