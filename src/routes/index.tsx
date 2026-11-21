@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import hero from "@/assets/hero.jpg";
 import { Logo } from "@/components/app/Shell";
+import { Footer } from "@/components/app/Footer";
 import { Poster } from "@/components/app/bits";
 import { titles } from "@/lib/mock";
 // Landing poster strip uses static sample titles so the public page needs no sign-in.
@@ -176,6 +177,7 @@ function Index() {
           </div>
         </section>
       </div>
+      <Footer />
     </div>
   );
 }

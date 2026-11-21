@@ -128,10 +128,10 @@ function CoverImg({
 }) {
   const ref = useRef<HTMLImageElement>(null);
   const [failed, setFailed] = useState(false);
-  // Some series only have a logo / title card (not a vertical poster): show it whole, uncropped.
+  // Square covers fill the card; only clearly horizontal art (a logo / title card) is shown whole.
   const [wide, setWide] = useState(false);
   const measure = (img: HTMLImageElement) =>
-    img.naturalWidth > 0 && setWide(img.naturalWidth > img.naturalHeight * 0.95);
+    img.naturalWidth > 0 && setWide(img.naturalWidth > img.naturalHeight * 1.2);
   // A cached image can finish loading before hydration, when onLoad has no listener yet.
   useEffect(() => {
     if (ref.current?.complete) measure(ref.current);

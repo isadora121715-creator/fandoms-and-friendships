@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { meQuery, SEED_MIN_TITLES, titlesQuery } from "@/lib/db";
 import { seedCatalog } from "@/lib/catalog.functions";
 import { Avatar } from "./bits";
+import { Footer } from "./Footer";
 
 const main = [
   { to: "/feed", label: "Feed", icon: Home },
@@ -125,6 +126,7 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+      <Footer />
       <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-background/95 backdrop-blur md:hidden">
         {[...main, { to: "/perfil", label: "Perfil", icon: User } as const].map((n) => (
           <Link

@@ -2,9 +2,8 @@
 // Generated once; titles added later are looked up at runtime (see catalog.functions.ts).
 // null = looked up, no image found.
 export const TITLE_IMAGES: Record<string, string | null> = {
-  "1883":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/1883_Logo_Cropped.jpg/500px-1883_Logo_Cropped.jpg",
-  "1923": "https://upload.wikimedia.org/wikipedia/en/9/9e/1923_Logo_%28cropped%29.jpg",
+  "1883": "https://static.tvmaze.com/uploads/images/medium_portrait/486/1215657.jpg",
+  "1923": "https://static.tvmaze.com/uploads/images/medium_portrait/557/1392576.jpg",
   "elden-ring": "https://upload.wikimedia.org/wikipedia/en/b/b9/Elden_Ring_Box_art.jpg",
   hades: "https://upload.wikimedia.org/wikipedia/en/c/cc/Hades_cover_art.jpg",
   "baldurs-gate-3":
@@ -13,9 +12,8 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "hollow-knight":
     "https://upload.wikimedia.org/wikipedia/en/d/de/Hollow_Knight_2026_cover_art.jpg",
   dark: "https://upload.wikimedia.org/wikipedia/pt/f/f6/Dark_%28s%C3%A9rie%29.jpg",
-  arcane: "https://upload.wikimedia.org/wikipedia/pt/b/b4/ArcaneLogo.png",
-  "the-bear":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/The_Bear_Title_Card.jpg/500px-The_Bear_Title_Card.jpg",
+  arcane: "https://static.tvmaze.com/uploads/images/medium_portrait/536/1340287.jpg",
+  "the-bear": "https://static.tvmaze.com/uploads/images/medium_portrait/629/1574642.jpg",
   severance: "https://static.tvmaze.com/uploads/images/medium_portrait/548/1371406.jpg",
   "the-last-of-us":
     "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/The_Last_of_Us_vertical_logo.svg/500px-The_Last_of_Us_vertical_logo.svg.png",
@@ -46,7 +44,7 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "god-of-war-ragnarok":
     "https://upload.wikimedia.org/wikipedia/en/e/ee/God_of_War_Ragnar%C3%B6k_cover.jpg",
   "marvel-s-spider-man":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Spider-Man_video_game_series_logo.png/500px-Spider-Man_video_game_series_logo.png",
+    "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1817070/library_600x900.jpg",
   "marvel-s-spider-man-miles-morales":
     "https://upload.wikimedia.org/wikipedia/en/a/a3/Spider-Man_Miles_Morales.jpeg",
   "ghost-of-tsushima": "https://upload.wikimedia.org/wikipedia/en/b/b6/Ghost_of_Tsushima.jpg",
@@ -66,7 +64,7 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "baldur-s-gate-3":
     "https://upload.wikimedia.org/wikipedia/en/1/12/Baldur%27s_Gate_3_cover_art.jpg",
   "divinity-original-sin-2":
-    "https://upload.wikimedia.org/wikipedia/en/4/48/Divinity_Original_Sin_2_cover_art.jpg",
+    "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/435150/library_600x900.jpg",
   "the-elder-scrolls-v-skyrim":
     "https://upload.wikimedia.org/wikipedia/en/1/15/The_Elder_Scrolls_V_Skyrim_cover.png",
   "dragon-age-inquisition":
@@ -105,7 +103,7 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "project-zomboid":
     "https://upload.wikimedia.org/wikipedia/en/0/0c/Boxshot_of_video_game_Project_zomboid.jpg",
   "green-hell":
-    "https://upload.wikimedia.org/wikipedia/en/6/6d/Green_Hell_Nintendo_Switch_%28Digital_Release%29_Cover_Art.jpg",
+    "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/815370/library_600x900.jpg",
   "resident-evil-village":
     "https://upload.wikimedia.org/wikipedia/en/2/2c/Resident_Evil_Village.png",
   "resident-evil-4-2023":
@@ -187,14 +185,15 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "a-short-hike": "https://upload.wikimedia.org/wikipedia/en/9/9d/A_Short_Hike.png",
   unpacking: "https://upload.wikimedia.org/wikipedia/en/4/4b/Unpacking_game_cover.png",
   "powerwash-simulator":
-    "https://upload.wikimedia.org/wikipedia/en/c/c4/PowerWash_Simulator_Logo.jpg",
+    "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1290000/library_600x900.jpg",
   "my-time-at-portia":
     "https://upload.wikimedia.org/wikipedia/en/1/13/My_Time_at_Portia_Cover_Art.jpeg",
   "cozy-grove": "https://upload.wikimedia.org/wikipedia/en/b/b5/Cozy_Grove_cover.jpg",
   "it-takes-two": "https://upload.wikimedia.org/wikipedia/en/a/aa/It_Takes_Two_cover_art.png",
   "overcooked-2": "https://upload.wikimedia.org/wikipedia/en/0/03/Overcooked_2_cover_art.png",
   "moving-out": "https://upload.wikimedia.org/wikipedia/en/3/3b/Moving_Out_cover_art.jpg",
-  "moving-out-2": "https://upload.wikimedia.org/wikipedia/en/8/8b/Moving_Out_2_cover.jpg",
+  "moving-out-2":
+    "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1641700/library_600x900.jpg",
   "mario-kart-8-deluxe": "https://upload.wikimedia.org/wikipedia/en/b/b5/MarioKart8Boxart.jpg",
   "super-mario-party-jamboree":
     "https://upload.wikimedia.org/wikipedia/en/3/3a/Super_Mario_Party_Jamboree_cover_art.jpg",
@@ -203,123 +202,100 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "teenage-mutant-ninja-turtles-shredder-s-revenge":
     "https://upload.wikimedia.org/wikipedia/en/1/1e/Teenage_Mutant_Ninja_Turtles_Shredder%E2%80%99s_Revenge_cover_art.jpg",
   "lovers-in-a-dangerous-spacetime":
-    "https://upload.wikimedia.org/wikipedia/en/a/a1/Lovers_in_a_dangerous_Spacetime_logo.jpeg",
+    "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/252110/library_600x900.jpg",
   snipperclips: "https://upload.wikimedia.org/wikipedia/en/f/f6/Snipperclips.png",
-  "stranger-things":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Stranger_Things_logo.png/500px-Stranger_Things_logo.png",
-  "the-crown": "https://upload.wikimedia.org/wikipedia/en/1/18/The_Crown_Title_Card.jpg",
-  bridgerton: "https://upload.wikimedia.org/wikipedia/en/3/3d/Bridgerton_Title_Card.png",
-  heartstopper: "https://upload.wikimedia.org/wikipedia/en/8/89/Heartstopper_title-card.png",
+  "stranger-things": "https://static.tvmaze.com/uploads/images/medium_portrait/595/1489169.jpg",
+  "the-crown": "https://static.tvmaze.com/uploads/images/medium_portrait/632/1580063.jpg",
+  bridgerton: "https://static.tvmaze.com/uploads/images/medium_portrait/614/1535959.jpg",
+  heartstopper: "https://static.tvmaze.com/uploads/images/medium_portrait/632/1580747.jpg",
   "sex-education": "https://static.tvmaze.com/uploads/images/medium_portrait/483/1209495.jpg",
   ozark: "https://static.tvmaze.com/uploads/images/medium_portrait/398/996611.jpg",
   mindhunter: "https://static.tvmaze.com/uploads/images/medium_portrait/501/1253490.jpg",
   "la-casa-de-papel": "https://static.tvmaze.com/uploads/images/medium_portrait/376/940830.jpg",
-  "round-6":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Squid_Game_2021_vector_logo_english.svg/500px-Squid_Game_2021_vector_logo_english.svg.png",
+  "round-6": "https://static.tvmaze.com/uploads/images/medium_portrait/576/1440521.jpg",
   wandinha: "https://static.tvmaze.com/uploads/images/medium_portrait/586/1466410.jpg",
   "o-gambito-da-rainha":
     "https://upload.wikimedia.org/wikipedia/en/1/12/The_Queen%27s_Gambit_%28miniseries%29.png",
-  "the-boys":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/The_Boys_TV_series_logo.svg/500px-The_Boys_TV_series_logo.svg.png",
+  "the-boys": "https://static.tvmaze.com/uploads/images/medium_portrait/619/1547768.jpg",
   "gen-v": "https://upload.wikimedia.org/wikipedia/en/7/76/Gen_V_Title_Card.png",
   invencivel: "https://static.tvmaze.com/uploads/images/medium_portrait/618/1545777.jpg",
-  fallout:
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Fallout_television_series_logo.svg/500px-Fallout_television_series_logo.svg.png",
+  fallout: "https://static.tvmaze.com/uploads/images/medium_portrait/599/1499142.jpg",
   "the-expanse": "https://static.tvmaze.com/uploads/images/medium_portrait/445/1114081.jpg",
-  reacher:
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/Reacher_series_title_card.png/500px-Reacher_series_title_card.png",
+  reacher: "https://static.tvmaze.com/uploads/images/medium_portrait/636/1591350.jpg",
   "jack-ryan": "https://upload.wikimedia.org/wikipedia/en/1/12/Jack_Ryan.png",
   "a-maravilhosa-sra-maisel":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/The_Marvelous_Mrs._Maisel.svg/500px-The_Marvelous_Mrs._Maisel.svg.png",
-  fleabag:
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Fleabag_titlecard.png/500px-Fleabag_titlecard.png",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/456/1141825.jpg",
+  fleabag: "https://static.tvmaze.com/uploads/images/medium_portrait/192/482341.jpg",
   "o-verao-que-mudou-minha-vida":
-    "https://upload.wikimedia.org/wikipedia/en/d/d1/The_Summer_I_Turned_Pretty_%28TV_series%29_Title_Card.png",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/576/1440848.jpg",
   "daisy-jones-the-six":
     "https://upload.wikimedia.org/wikipedia/en/1/18/Daisy_Jones_and_the_Six_poster.jpg",
   "o-senhor-dos-aneis-os-aneis-de-poder":
-    "https://upload.wikimedia.org/wikipedia/en/1/1d/LOTR_The_Rings_of_Power_logo.jpg",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/650/1627263.jpg",
   "the-mandalorian": "https://static.tvmaze.com/uploads/images/medium_portrait/501/1253498.jpg",
-  andor: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Andor.svg/500px-Andor.svg.png",
+  andor: "https://static.tvmaze.com/uploads/images/medium_portrait/564/1411766.jpg",
   ahsoka: "https://static.tvmaze.com/uploads/images/medium_portrait/636/1592346.jpg",
-  "obi-wan-kenobi":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Obi_Wan_Kenobi_series_logo_simplified.svg/500px-Obi_Wan_Kenobi_series_logo_simplified.svg.png",
-  wandavision: "https://upload.wikimedia.org/wikipedia/en/2/20/WandaVision_logo.png",
-  loki: "https://upload.wikimedia.org/wikipedia/en/4/4e/Loki_%28TV_series%29_logo.png",
-  "ms-marvel":
-    "https://upload.wikimedia.org/wikipedia/en/a/ac/Ms._Marvel_%28miniseries%29_logo.jpg",
-  "cavaleiro-da-lua":
-    "https://upload.wikimedia.org/wikipedia/en/a/a8/Moon_Knight_%28miniseries%29_logo.jpg",
-  "gaviao-arqueiro":
-    "https://upload.wikimedia.org/wikipedia/en/7/7a/Hawkeye_%28miniseries%29_logo.png",
+  "obi-wan-kenobi": "https://static.tvmaze.com/uploads/images/medium_portrait/498/1246074.jpg",
+  wandavision: "https://static.tvmaze.com/uploads/images/medium_portrait/295/738028.jpg",
+  loki: "https://static.tvmaze.com/uploads/images/medium_portrait/478/1195717.jpg",
+  "ms-marvel": "https://static.tvmaze.com/uploads/images/medium_portrait/405/1013952.jpg",
+  "cavaleiro-da-lua": "https://static.tvmaze.com/uploads/images/medium_portrait/407/1019370.jpg",
+  "gaviao-arqueiro": "https://static.tvmaze.com/uploads/images/medium_portrait/383/959105.jpg",
   "percy-jackson-e-os-olimpianos":
-    "https://thumb.wikimedia.org/wikipedia/en/thumb/e/e2/Percy_Jackson_and_the_Olympians_%28TV_series%29_logo.svg/500px-Percy_Jackson_and_the_Olympians_%28TV_series%29_logo.svg.png",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/651/1628736.jpg",
   "high-school-musical-a-serie-o-musical":
-    "https://upload.wikimedia.org/wikipedia/en/4/40/High_School_Musical%2C_The_Musical%2C_The_Series_logo.png",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/465/1164995.jpg",
   "monstros-no-trabalho":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Monsters_at_Work_logo.svg/500px-Monsters_at_Work_logo.svg.png",
-  "game-of-thrones":
-    "https://thumb.wikimedia.org/wikipedia/pt/thumb/a/a0/GameofThrones.png/500px-GameofThrones.png",
-  "a-casa-do-dragao":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/House_of_the_dragon_logo.png/500px-House_of_the_dragon_logo.png",
-  succession: "https://upload.wikimedia.org/wikipedia/commons/7/73/SuccessionTV.png",
-  "the-white-lotus":
-    "https://upload.wikimedia.org/wikipedia/pt/4/41/The_White_Lotus_Title_Card.png",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/507/1268353.jpg",
+  "game-of-thrones": "https://static.tvmaze.com/uploads/images/medium_portrait/498/1245274.jpg",
+  "a-casa-do-dragao": "https://static.tvmaze.com/uploads/images/medium_portrait/627/1568449.jpg",
+  succession: "https://static.tvmaze.com/uploads/images/medium_portrait/453/1134275.jpg",
+  "the-white-lotus": "https://static.tvmaze.com/uploads/images/medium_portrait/557/1393876.jpg",
   euphoria: "https://static.tvmaze.com/uploads/images/medium_portrait/621/1552657.jpg",
-  "true-detective":
-    "https://upload.wikimedia.org/wikipedia/en/5/5a/True_Detective_2014_Intertitle.jpg",
+  "true-detective": "https://static.tvmaze.com/uploads/images/medium_portrait/490/1226764.jpg",
   "mare-of-easttown":
     "https://upload.wikimedia.org/wikipedia/en/2/26/Mare_of_Easttown_2021_Television_Series_poster.png",
   chernobyl: "https://upload.wikimedia.org/wikipedia/en/a/a7/Chernobyl_2019_Miniseries.jpg",
-  "familia-soprano": "https://upload.wikimedia.org/wikipedia/pt/3/33/TheSopranos-Logo.png",
-  "the-wire":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/The_Wire_logo.svg/500px-The_Wire_logo.svg.png",
-  barry:
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Barry_logo.svg/500px-Barry_logo.svg.png",
-  silo: "https://upload.wikimedia.org/wikipedia/pt/1/1d/Silo-TV-Series-Title.png",
+  "familia-soprano": "https://static.tvmaze.com/uploads/images/medium_portrait/4/11341.jpg",
+  "the-wire": "https://static.tvmaze.com/uploads/images/medium_portrait/504/1260189.jpg",
+  barry: "https://static.tvmaze.com/uploads/images/medium_portrait/455/1138151.jpg",
+  silo: "https://static.tvmaze.com/uploads/images/medium_portrait/631/1577677.jpg",
   fundacao: "https://static.tvmaze.com/uploads/images/medium_portrait/573/1433544.jpg",
-  "for-all-mankind":
-    "https://upload.wikimedia.org/wikipedia/en/f/f3/For_All_Mankind_Title_Card.png",
-  "ted-lasso": "https://upload.wikimedia.org/wikipedia/en/7/73/Tedlassotitlecard.jpg",
+  "for-all-mankind": "https://static.tvmaze.com/uploads/images/medium_portrait/616/1541416.jpg",
+  "ted-lasso": "https://static.tvmaze.com/uploads/images/medium_portrait/634/1585930.jpg",
   "falando-a-real": "https://static.tvmaze.com/uploads/images/medium_portrait/610/1527402.jpg",
   "the-morning-show": "https://static.tvmaze.com/uploads/images/medium_portrait/594/1485135.jpg",
   "slow-horses": "https://static.tvmaze.com/uploads/images/medium_portrait/641/1604425.jpg",
-  "bad-sisters":
-    "https://thumb.wikimedia.org/wikipedia/en/thumb/b/ba/BadSisters_LOGO.png/500px-BadSisters_LOGO.png",
+  "bad-sisters": "https://static.tvmaze.com/uploads/images/medium_portrait/540/1351090.jpg",
   pachinko: "https://upload.wikimedia.org/wikipedia/en/2/20/Pachinko_%28TV_series%29.jpeg",
-  dickinson: "https://upload.wikimedia.org/wikipedia/en/9/97/Dickinson_Title_Card.jpg",
-  "mythic-quest": "https://upload.wikimedia.org/wikipedia/en/b/be/Mythic_Quest_Title_Card.jpg",
-  "tulsa-king": "https://upload.wikimedia.org/wikipedia/en/9/92/Tulsa_King_title_card.jpg",
-  "mayor-of-kingstown":
-    "https://upload.wikimedia.org/wikipedia/en/d/db/Mayor_of_Kingstown_%282025%29_title_card.jpg",
-  lioness: "https://upload.wikimedia.org/wikipedia/en/6/64/Lioness_%282025%29_title_card.jpg",
+  dickinson: "https://static.tvmaze.com/uploads/images/medium_portrait/366/916623.jpg",
+  "mythic-quest": "https://static.tvmaze.com/uploads/images/medium_portrait/564/1412475.jpg",
+  "tulsa-king": "https://static.tvmaze.com/uploads/images/medium_portrait/646/1615902.jpg",
+  "mayor-of-kingstown": "https://static.tvmaze.com/uploads/images/medium_portrait/594/1486611.jpg",
+  lioness: "https://static.tvmaze.com/uploads/images/medium_portrait/635/1587727.jpg",
   halo: "https://static.tvmaze.com/uploads/images/medium_portrait/502/1256105.jpg",
   "star-trek-strange-new-worlds":
     "https://static.tvmaze.com/uploads/images/medium_portrait/635/1589217.jpg",
-  "star-trek-picard":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Star_Trek_Picard_logo.svg/500px-Star_Trek_Picard_logo.svg.png",
+  "star-trek-picard": "https://static.tvmaze.com/uploads/images/medium_portrait/452/1131219.jpg",
   "the-good-fight": "https://static.tvmaze.com/uploads/images/medium_portrait/602/1506905.jpg",
-  "dexter-new-blood": "https://upload.wikimedia.org/wikipedia/en/0/00/Dexter-New-Blood.jpg",
+  "dexter-new-blood": "https://static.tvmaze.com/uploads/images/medium_portrait/498/1245284.jpg",
   yellowjackets: "https://static.tvmaze.com/uploads/images/medium_portrait/647/1619412.jpg",
   "a-oferta": "https://upload.wikimedia.org/wikipedia/en/0/0d/The.Offer.Miniseries.jpg",
-  "sob-pressao": "https://upload.wikimedia.org/wikipedia/en/3/3d/Sob_Press%C3%A3o_intertitle.jpg",
+  "sob-pressao": "https://static.tvmaze.com/uploads/images/medium_portrait/136/341090.jpg",
   "segunda-chamada": "https://upload.wikimedia.org/wikipedia/en/0/0a/Second_Call.jpg",
   desalma: "https://upload.wikimedia.org/wikipedia/en/6/6a/Unsoul_poster.jpg",
-  "arcanjo-renegado":
-    "https://upload.wikimedia.org/wikipedia/en/d/d1/Arcanjo_Renegado_title_card.jpg",
-  "as-five": "https://upload.wikimedia.org/wikipedia/en/4/41/As_Five_logo.jpg",
-  "verdades-secretas-ii":
-    "https://upload.wikimedia.org/wikipedia/pt/9/97/Logotipo_de_Verdades_Secretas_II.jpg",
+  "arcanjo-renegado": "https://static.tvmaze.com/uploads/images/medium_portrait/469/1173509.jpg",
+  "as-five": "https://static.tvmaze.com/uploads/images/medium_portrait/447/1119605.jpg",
+  "verdades-secretas-ii": "https://static.tvmaze.com/uploads/images/medium_portrait/367/919103.jpg",
   "onde-esta-meu-coracao":
-    "https://upload.wikimedia.org/wikipedia/en/2/2d/Onde_Est%C3%A1_Meu_Cora%C3%A7%C3%A3o_title_card.jpg",
-  aruanas: "https://upload.wikimedia.org/wikipedia/en/4/4f/Aruanas_title_card.png",
-  "rensga-hits": "https://upload.wikimedia.org/wikipedia/en/c/c0/Rensga_Hits_title_card.jpg",
-  "os-outros": "https://upload.wikimedia.org/wikipedia/pt/4/41/Os_Outros_%28s%C3%A9rie%29.png",
-  fim: "https://thumb.wikimedia.org/wikipedia/pt/thumb/5/50/Fim_%28teless%C3%A9rie%29.jpg/500px-Fim_%28teless%C3%A9rie%29.jpg",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/390/976296.jpg",
+  aruanas: "https://static.tvmaze.com/uploads/images/medium_portrait/489/1223090.jpg",
+  "rensga-hits": "https://static.tvmaze.com/uploads/images/medium_portrait/417/1044984.jpg",
+  "os-outros": "https://static.tvmaze.com/uploads/images/medium_portrait/461/1154906.jpg",
+  fim: "https://static.tvmaze.com/uploads/images/medium_portrait/483/1207862.jpg",
   "justica-2":
     "https://upload.wikimedia.org/wikipedia/pt/a/a0/Justi%C3%A7a_2_-_P%C3%B4ster_de_Balthazar.jpg",
-  "one-piece":
-    "https://thumb.wikimedia.org/wikipedia/en/thumb/1/13/One_Piece_Anime_Logo_International.png/500px-One_Piece_Anime_Logo_International.png",
+  "one-piece": "https://static.tvmaze.com/uploads/images/medium_portrait/504/1262497.jpg",
   "naruto-shippuden": "https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg",
   "jujutsu-kaisen": "https://upload.wikimedia.org/wikipedia/en/4/46/Jujutsu_kaisen.jpg",
   "demon-slayer-kimetsu-no-yaiba":
@@ -328,41 +304,34 @@ export const TITLE_IMAGES: Record<string, string | null> = {
     "https://upload.wikimedia.org/wikipedia/en/d/d6/Shingeki_no_Kyojin_manga_volume_1.jpg",
   "my-hero-academia":
     "https://upload.wikimedia.org/wikipedia/en/5/5a/Boku_no_Hero_Academia_Volume_1.png",
-  "spy-family":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Spy_%C3%97_Family_logo.png/500px-Spy_%C3%97_Family_logo.png",
+  "spy-family": "https://static.tvmaze.com/uploads/images/medium_portrait/590/1477119.jpg",
   "frieren-alem-do-fim-da-jornada":
     "https://upload.wikimedia.org/wikipedia/en/6/60/Frieren_Beyond_Journey%27s_End.jpg",
   haikyu: "https://upload.wikimedia.org/wikipedia/en/6/6b/Haiky%C5%AB_Volume_1.jpg",
   "dr-stone": "https://upload.wikimedia.org/wikipedia/en/2/29/Doctor_stone.jpg",
   "blue-lock": "https://upload.wikimedia.org/wikipedia/en/c/c6/Blue_Lock_manga_volume_1.png",
   "mob-psycho-100": "https://upload.wikimedia.org/wikipedia/en/4/4b/Mob_Psycho_100_manga_vol_1.jpg",
-  "o-urso":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/The_Bear_Title_Card.jpg/500px-The_Bear_Title_Card.jpg",
+  "o-urso": "https://static.tvmaze.com/uploads/images/medium_portrait/629/1574642.jpg",
   "only-murders-in-the-building":
-    "https://upload.wikimedia.org/wikipedia/en/b/be/Only_Murders_logo.jpeg",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/652/1630933.jpg",
   shogun:
     "https://upload.wikimedia.org/wikipedia/en/b/b6/Sh%C5%8Dgun_%282024_miniseries%29_poster.jpg",
-  "the-handmaid-s-tale":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/The_Handmaid%27s_Tale_intertitle.png/500px-The_Handmaid%27s_Tale_intertitle.png",
-  dopesick:
-    "https://upload.wikimedia.org/wikipedia/en/6/6e/Dopesick_%28miniseries%29_Title_Card.png",
-  "the-dropout":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/The_Dropout_Logo.png/500px-The_Dropout_Logo.png",
-  atlanta: "https://upload.wikimedia.org/wikipedia/commons/0/04/Atlanta_Title_Card.png",
-  "reservation-dogs":
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Reservation_Dogs_Logo.jpg/500px-Reservation_Dogs_Logo.jpg",
+  "the-handmaid-s-tale": "https://static.tvmaze.com/uploads/images/medium_portrait/562/1406667.jpg",
+  dopesick: "https://static.tvmaze.com/uploads/images/medium_portrait/592/1480209.jpg",
+  "the-dropout": "https://static.tvmaze.com/uploads/images/medium_portrait/395/987963.jpg",
+  atlanta: "https://static.tvmaze.com/uploads/images/medium_portrait/437/1093345.jpg",
+  "reservation-dogs": "https://static.tvmaze.com/uploads/images/medium_portrait/475/1189118.jpg",
   "what-we-do-in-the-shadows":
-    "https://upload.wikimedia.org/wikipedia/en/3/31/What_We_Do_in_the_Shadows_Title_Card.jpg",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/535/1337833.jpg",
   "under-the-banner-of-heaven":
     "https://upload.wikimedia.org/wikipedia/en/2/22/Under_the_Banner_of_Heaven_poster.jpg",
-  "the-patient": "https://upload.wikimedia.org/wikipedia/en/1/18/The_Patient_title_card.png",
-  fargo:
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Fargo_%28TV_logo%29.svg/500px-Fargo_%28TV_logo%29.svg.png",
+  "the-patient": "https://static.tvmaze.com/uploads/images/medium_portrait/436/1091766.jpg",
+  fargo: "https://static.tvmaze.com/uploads/images/medium_portrait/487/1219631.jpg",
   "the-amazing-digital-circus":
-    "https://upload.wikimedia.org/wikipedia/en/8/84/Amazing_Digital_Circus_logo.png",
+    "https://static.tvmaze.com/uploads/images/medium_portrait/483/1207540.jpg",
   "murder-drones": "https://static.tvmaze.com/uploads/images/medium_portrait/432/1080092.jpg",
-  "helluva-boss": "https://upload.wikimedia.org/wikipedia/en/1/11/Helluvabosstitlecard.png",
-  rwby: "https://upload.wikimedia.org/wikipedia/en/4/45/RWBY_Cover.jpg",
+  "helluva-boss": "https://static.tvmaze.com/uploads/images/medium_portrait/515/1288260.jpg",
+  rwby: "https://static.tvmaze.com/uploads/images/medium_portrait/447/1119412.jpg",
   "viva-la-dirt-league-epic-npc-man":
     "https://thumb.wikimedia.org/wikipedia/en/thumb/6/69/Viva_La_Dirt_League_logo.svg/500px-Viva_La_Dirt_League_logo.svg.png",
   "animator-vs-animation":
@@ -371,9 +340,8 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "bom-dia-veronica":
     "https://upload.wikimedia.org/wikipedia/en/1/19/Good_Morning%2C_Veronica_poster.png",
   "cidade-invisivel": "https://upload.wikimedia.org/wikipedia/en/3/33/Invisible_City_poster.png",
-  sintonia:
-    "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Sintonia_%28logo%29.svg/500px-Sintonia_%28logo%29.svg.png",
-  "the-guild": "https://upload.wikimedia.org/wikipedia/en/f/fe/TheGuildLOGO.png",
+  sintonia: "https://static.tvmaze.com/uploads/images/medium_portrait/362/905246.jpg",
+  "the-guild": "https://static.tvmaze.com/uploads/images/medium_portrait/20/50302.jpg",
   "a-bruxa": "https://upload.wikimedia.org/wikipedia/en/b/bf/The_Witch_poster.png",
   "a-chegada": "https://upload.wikimedia.org/wikipedia/en/d/df/Arrival%2C_Movie_Poster.jpg",
   "a-escolha-perfeita":
@@ -433,9 +401,9 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "halloween-a-noite-do-terror":
     "https://upload.wikimedia.org/wikipedia/en/a/af/Halloween_%281978%29_theatrical_poster.jpg",
   "harry-potter-e-a-pedra-filosofal":
-    "https://upload.wikimedia.org/wikipedia/en/7/7a/Harry_Potter_and_the_Philosopher%27s_Stone_banner.jpg",
+    "https://thumb.wikimedia.org/wikipedia/sr/thumb/2/2c/Harry_Potter_and_the_Philosopher%27s_Stone.jpg/500px-Harry_Potter_and_the_Philosopher%27s_Stone.jpg",
   "harry-potter-e-o-prisioneiro-de-azkaban":
-    "https://upload.wikimedia.org/wikipedia/en/1/18/Harry_Potter_and_the_Prisoner_of_Azkaban_film_poster.jpg",
+    "https://thumb.wikimedia.org/wikipedia/sr/thumb/2/23/Harry_Potter_%D0%A2he_Prisoner_of_Azkaban.jpg/500px-Harry_Potter_%D0%A2he_Prisoner_of_Azkaban.jpg",
   hereditario: "https://upload.wikimedia.org/wikipedia/en/d/d9/Hereditary.png",
   "historia-de-um-casamento":
     "https://upload.wikimedia.org/wikipedia/en/5/55/MarriageStoryPoster.png",
@@ -499,7 +467,7 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "onde-os-fracos-nao-tem-vez":
     "https://upload.wikimedia.org/wikipedia/en/8/8b/No_Country_for_Old_Men_poster.jpg",
   "orgulho-e-preconceito":
-    "https://upload.wikimedia.org/wikipedia/en/0/03/Prideandprejudiceposter.jpg",
+    "https://thumb.wikimedia.org/wikipedia/sr/thumb/a/aa/Pride_and_prejudice.jpg/500px-Pride_and_prejudice.jpg",
   "os-bons-companheiros": "https://upload.wikimedia.org/wikipedia/en/7/7b/Goodfellas.jpg",
   "os-infiltrados": "https://upload.wikimedia.org/wikipedia/en/5/50/Departed234.jpg",
   "os-outros-filme": "https://upload.wikimedia.org/wikipedia/en/4/4c/TheOthers.jpg",
