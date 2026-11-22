@@ -53,6 +53,54 @@ export type Database = {
           },
         ]
       }
+      episode_ratings: {
+        Row: {
+          best_character: string | null
+          episode: number
+          id: string
+          rating: number | null
+          season: number
+          title_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          best_character?: string | null
+          episode: number
+          id?: string
+          rating?: number | null
+          season: number
+          title_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          best_character?: string | null
+          episode?: number
+          id?: string
+          rating?: number | null
+          season?: number
+          title_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "episode_ratings_title_id_fkey"
+            columns: ["title_id"]
+            isOneToOne: false
+            referencedRelation: "titles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "episode_ratings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follows: {
         Row: {
           follower_id: string
@@ -227,6 +275,7 @@ export type Database = {
       profiles: {
         Row: {
           avatar_hue: number
+          avatar_url: string | null
           bio: string
           created_at: string
           display_name: string
@@ -236,6 +285,7 @@ export type Database = {
         }
         Insert: {
           avatar_hue?: number
+          avatar_url?: string | null
           bio?: string
           created_at?: string
           display_name: string
@@ -245,6 +295,7 @@ export type Database = {
         }
         Update: {
           avatar_hue?: number
+          avatar_url?: string | null
           bio?: string
           created_at?: string
           display_name?: string
