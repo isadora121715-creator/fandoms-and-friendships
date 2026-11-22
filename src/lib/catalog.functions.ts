@@ -216,22 +216,90 @@ function pickPage(
 }
 
 /** Poster / box art for a title: the English Wikipedia infobox image, else the Portuguese one. */
-async function findCover(t: { name: string; kind: Kind; year: number }) {
+const same = (a: string, b: string) => slugify(a) === slugify(b);
+
+/** Vertical poster from TVMaze (series). Only an exact name match counts, preferring the same year. */
+async function tvmazePoster(name: string, year: number) {
+  const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(name)}`, {
+    headers: UA,
+  });
+  if (!res.ok) return null;
+  const list = (await res.json()) as {
+    show: { name: string; premiered: string | null; image: { medium: string } | null };
+  }[];
+  const shows = list.map((r) => r.show).filter((s) => s.image && same(s.name, name));
+  const pick =
+    (year ? shows.find((s) => Number(s.premiered?.slice(0, 4)) === year) : undefined) ?? shows[0];
+  return pick?.image?.medium ?? null;
+}
+
+/** Vertical library art from Steam (PC games). Only an exact name match counts. */
+async function steamPoster(name: string) {
+  const res = await fetch(
+    `https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(name)}&cc=US&l=english`,
+    { headers: UA },
+  );
+  if (!res.ok) return null;
+  const r = (await res.json()) as { items?: { id: number; name: string }[] };
+  const item = r.items?.find((i) => same(i.name.replace(/[™®]/g, ""), name));
+  if (!item) return null;
+  const url = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${item.id}/library_600x900.jpg`;
+  const head = await fetch(url, { method: "HEAD", headers: UA });
+  return head.ok ? url : null;
+}
+
+/** Wikipedia infobox image: English page (via the Portuguese one) first, then the Portuguese one. */
+async function wikipediaCover(t: { name: string; kind: Kind; year: number }) {
   const pt = pickPage(await searchPages("pt", `${t.name} ${HINT[t.kind]}`), t, KIND_RE[t.kind]);
+  let enTitle: string | null = null;
   if (pt) {
     const pi = await pageImage("pt", pt.title);
+    enTitle = pi.en;
     if (pi.en) {
       const ei = await pageImage("en", pi.en);
-      if (ei.thumb) return ei.thumb;
+      if (ei.thumb) return { url: ei.thumb, enTitle };
     }
-    if (pi.thumb) return pi.thumb;
+    if (pi.thumb) return { url: pi.thumb, enTitle };
   }
   const en = pickPage(
     await searchPages("en", `${t.name} ${EN_HINT[t.kind]}`),
     t,
     EN_KIND_RE[t.kind],
   );
-  return en ? (await pageImage("en", en.title)).thumb : null;
+  return {
+    url: en ? (await pageImage("en", en.title)).thumb : null,
+    enTitle: enTitle ?? en?.title ?? null,
+  };
+}
+
+const attempt = async <T>(fn: () => Promise<T>): Promise<T | null> => {
+  try {
+    return await fn();
+  } catch {
+    return null; // one source failing (rate limit, timeout) must not block the others
+  }
+};
+
+/**
+ * Cover for a title, preferring vertical posters: TVMaze for series, Steam for games,
+ * Wikipedia for everything (and as the fallback). Series with a Portuguese name are retried
+ * on TVMaze with their English title from Wikipedia.
+ */
+async function findCover(t: { name: string; kind: Kind; year: number }) {
+  if (t.kind === "serie") {
+    const p = await attempt(() => tvmazePoster(t.name, t.year));
+    if (p) return p;
+  }
+  if (t.kind === "jogo") {
+    const p = await attempt(() => steamPoster(t.name));
+    if (p) return p;
+  }
+  const wiki = await attempt(() => wikipediaCover(t));
+  if (t.kind === "serie" && wiki?.enTitle && !same(cleanName(wiki.enTitle), t.name)) {
+    const p = await attempt(() => tvmazePoster(cleanName(wiki.enTitle!), t.year));
+    if (p) return p;
+  }
+  return wiki?.url ?? null;
 }
 
 /** Looks up the cover image of a title that isn't in the pre-generated image map. */
@@ -315,9 +383,11 @@ export const importTitle = createServerFn({ method: "POST" })
       .ilike("name", name)
       .limit(1)
       .maybeSingle();
-    if (existing.data) return { id: existing.data.id };
+    if (existing.data) return { id: existing.data.id, cover: null as string | null };
 
     const year = yearFrom(s.description, s.extract.split(". ")[0]);
+    // Look the cover up right away so the new title shows its image as soon as it opens.
+    const coverPromise = attempt(() => findCover({ name, kind: data.kind, year }));
     const base = slugify(name) || "titulo";
     const candidates = [
       base,
@@ -339,7 +409,7 @@ export const importTitle = createServerFn({ method: "POST" })
       hue: hueFor(id),
     });
     if (error) throw new Error(error.message);
-    return { id };
+    return { id, cover: await coverPromise };
   });
 
 const MISSING = "Sinopse ainda não disponível.";

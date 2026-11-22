@@ -5,6 +5,7 @@ import { Globe, Plus, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { importTitle, searchWeb, type WebResult } from "@/lib/catalog.functions";
 import { kindLabel, slugify, type Kind, type Title } from "@/lib/db";
+import { rememberCover } from "./useCover";
 
 function useDebounced<T>(value: T, ms: number) {
   const [v, setV] = useState(value);
@@ -34,7 +35,8 @@ export function WebSearch({ q, kind, catalog }: { q: string; kind?: Kind; catalo
 
   const add = useMutation({
     mutationFn: (r: WebResult) => importTitle({ data: { pageTitle: r.pageTitle, kind: r.kind } }),
-    onSuccess: ({ id }, r) => {
+    onSuccess: ({ id, cover }, r) => {
+      rememberCover(qc, id, cover);
       qc.invalidateQueries({ queryKey: ["titles"] });
       toast.success(`${r.name} adicionado ao catálogo`);
       navigate({ to: "/titulo/$id", params: { id } });

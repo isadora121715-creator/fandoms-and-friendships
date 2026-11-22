@@ -519,4 +519,14 @@ export const TITLE_IMAGES: Record<string, string | null> = {
   "whiplash-em-busca-da-perfeicao":
     "https://upload.wikimedia.org/wikipedia/en/0/01/Whiplash_poster.jpg",
   zodiaco: "https://upload.wikimedia.org/wikipedia/en/3/3a/Zodiac2007Poster.jpg",
+  "grand-theft-auto-vi": "https://upload.wikimedia.org/wikipedia/en/4/46/Grand_Theft_Auto_VI.png",
+  "percy-jackson-sea-of-monsters":
+    "https://upload.wikimedia.org/wikipedia/en/a/a9/Percy-Jackson-Sea-poster.jpg",
+  "until-dawn": "https://upload.wikimedia.org/wikipedia/en/d/d7/Until_Dawn_cover_art.jpg",
+  "until-dawn-2": "https://upload.wikimedia.org/wikipedia/en/4/4a/Until_Dawn_2_cover_art.jpg",
+  "pretty-little-liars": "https://static.tvmaze.com/uploads/images/medium_portrait/125/314775.jpg",
+  ravenswood: "https://static.tvmaze.com/uploads/images/medium_portrait/1/3700.jpg",
+  suits: "https://static.tvmaze.com/uploads/images/medium_portrait/393/983536.jpg",
+  "the-vampire-diaries": "https://static.tvmaze.com/uploads/images/medium_portrait/271/677698.jpg",
+  "the-body": "https://static.tvmaze.com/uploads/images/medium_portrait/644/1612276.jpg",
 };
