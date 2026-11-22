@@ -1,8 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Moon, Sun, Palette, ImageOff, Search, Check, X } from "lucide-react";
+import { Moon, Sun, Palette, ImageOff, Search, Check, X, Upload, Link2 } from "lucide-react";
+import { toast } from "sonner";
 import { titlesQuery, kindPlural, type Kind } from "@/lib/db";
-import { setTheme, setWallpaper, useTheme, useWallpaper } from "@/lib/prefs";
+import {
+  resizeImage,
+  setTheme,
+  setWallpaper,
+  setWallpaperPhoto,
+  setWallpaperStrength,
+  useTheme,
+  useWallpaper,
+  useWallpaperPhoto,
+  useWallpaperStrength,
+} from "@/lib/prefs";
 import { TITLE_IMAGES } from "@/lib/catalog-images";
 import { cn } from "@/lib/utils";
 import { useCover } from "./useCover";
@@ -17,29 +28,43 @@ function largeCover(url: string) {
   return url;
 }
 
-/** Full-page background made from the chosen title's cover. */
+/** Resolves the wallpaper setting to an image URL: catalog cover, web link or uploaded photo. */
+function useWallpaperSource(): { src: string | null; fallback: string | null } {
+  const value = useWallpaper();
+  const photo = useWallpaperPhoto();
+  const isTitle = !!value && value !== "photo" && !value.startsWith("url:");
+  const cover = useCover(isTitle ? value : "");
+  if (!value) return { src: null, fallback: null };
+  if (value === "photo") return { src: photo, fallback: null };
+  if (value.startsWith("url:")) return { src: value.slice(4), fallback: null };
+  return { src: cover ? largeCover(cover) : null, fallback: cover };
+}
+
+/** Full-page background. Its visibility follows the "intensidade" slider. */
 export function WallpaperLayer() {
-  const id = useWallpaper();
-  const url = useCover(id ?? "");
+  const { src: wanted, fallback } = useWallpaperSource();
+  const strength = useWallpaperStrength();
   const [src, setSrc] = useState<string | null>(null);
-  useEffect(() => setSrc(id && url ? largeCover(url) : null), [id, url]);
+  useEffect(() => setSrc(wanted), [wanted]);
   useEffect(() => {
     document.documentElement.classList.toggle("has-wallpaper", !!src);
     return () => document.documentElement.classList.remove("has-wallpaper");
   }, [src]);
-  if (!src || !url) return null;
+  if (!src) return null;
+  const s = strength / 100;
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       <img
         src={src}
         alt=""
         referrerPolicy="no-referrer"
-        onError={() => setSrc(src === url ? null : url)}
-        className="h-full w-full scale-105 object-cover opacity-60 blur-[3px]"
+        onError={() => setSrc(fallback && src !== fallback ? fallback : null)}
+        className="h-full w-full scale-105 object-cover"
+        style={{ opacity: 0.2 + 0.8 * s, filter: `blur(${(1 - s) * 4}px)` }}
       />
-      {/* keeps text readable in both themes */}
-      <div className="absolute inset-0 bg-background/70" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/80" />
+      {/* keeps text readable in both themes; thinner as the intensity goes up */}
+      <div className="absolute inset-0 bg-background" style={{ opacity: 0.88 - 0.66 * s }} />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/70" />
     </div>
   );
 }
@@ -84,15 +109,27 @@ function Thumb({
   );
 }
 
-/** Header button: light/dark switch and wallpaper picker. */
+const label = "text-xs font-semibold uppercase tracking-wider text-muted-foreground";
+const pill = (on: boolean) =>
+  cn(
+    "rounded-full px-3 py-1 text-xs",
+    on ? "bg-primary font-semibold text-primary-foreground" : "text-muted-foreground",
+  );
+
+/** Header button: light/dark switch, wallpaper (catalog cover, own photo or link) and its intensity. */
 export function AppearanceMenu() {
   const theme = useTheme();
   const wallpaper = useWallpaper();
+  const strength = useWallpaperStrength();
   const [open, setOpen] = useState(false);
+  const [source, setSource] = useState<"catalogo" | "foto">("catalogo");
   const [q, setQ] = useState("");
+  const [link, setLink] = useState("");
+  const [busy, setBusy] = useState(false);
   const [kind, setKind] = useState<Kind>("serie");
   const panel = useRef<HTMLDivElement>(null);
-  const { data: titles } = useQuery({ ...titlesQuery, enabled: open });
+  const fileInput = useRef<HTMLInputElement>(null);
+  const { data: titles } = useQuery({ ...titlesQuery, enabled: open && source === "catalogo" });
 
   useEffect(() => {
     if (!open) return;
@@ -116,6 +153,35 @@ export function AppearanceMenu() {
       .slice(0, 48);
   }, [titles, kind, q]);
 
+  async function onFile(file: File | undefined) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Escolha um arquivo de imagem.");
+      return;
+    }
+    setBusy(true);
+    try {
+      setWallpaperPhoto(await resizeImage(file));
+      toast.success("Foto aplicada como papel de parede");
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setBusy(false);
+      if (fileInput.current) fileInput.current.value = "";
+    }
+  }
+
+  function onLink() {
+    const u = link.trim();
+    if (!/^https:\/\/\S+$/i.test(u)) {
+      toast.error("Cole um link de imagem começando com https://");
+      return;
+    }
+    setWallpaper(`url:${u}`);
+    setLink("");
+    toast.success("Imagem aplicada como papel de parede");
+  }
+
   return (
     <div className="relative" ref={panel}>
       <button
@@ -128,7 +194,7 @@ export function AppearanceMenu() {
         <Palette className="h-5 w-5 md:h-4 md:w-4" />
       </button>
       {open && (
-        <div className="fixed inset-x-3 top-16 z-50 rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-2xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-9 sm:w-[22rem]">
+        <div className="fixed inset-x-3 top-16 z-50 max-h-[80vh] overflow-y-auto rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-2xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-9 sm:w-[22rem]">
           <div className="flex items-center justify-between">
             <p className="text-sm font-bold">Aparência</p>
             <button
@@ -141,16 +207,14 @@ export function AppearanceMenu() {
             </button>
           </div>
 
-          <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Tema
-          </p>
+          <p className={cn(label, "mt-3")}>Tema</p>
           <div className="mt-2 grid grid-cols-2 gap-2">
             {(
               [
                 ["dark", "Escuro", Moon],
                 ["light", "Claro", Sun],
               ] as const
-            ).map(([k, label, Icon]) => (
+            ).map(([k, text, Icon]) => (
               <button
                 key={k}
                 type="button"
@@ -163,15 +227,13 @@ export function AppearanceMenu() {
                 )}
               >
                 <Icon className="h-4 w-4" />
-                {label}
+                {text}
               </button>
             ))}
           </div>
 
-          <div className="mt-4 flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Papel de parede
-            </p>
+          <div className="mt-5 flex items-center justify-between">
+            <p className={label}>Papel de parede</p>
             {wallpaper && (
               <button
                 type="button"
@@ -183,45 +245,132 @@ export function AppearanceMenu() {
               </button>
             )}
           </div>
-          <div className="mt-2 flex gap-1">
-            {(["serie", "filme", "jogo"] as const).map((k) => (
+
+          {wallpaper && (
+            <label className="mt-3 block">
+              <span className="flex justify-between text-xs text-muted-foreground">
+                <span>Intensidade</span>
+                <span className="font-semibold text-foreground">{strength}%</span>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={strength}
+                onChange={(e) => setWallpaperStrength(Number(e.target.value))}
+                className="mt-1 w-full accent-[var(--color-primary)]"
+                aria-label="Intensidade do papel de parede"
+              />
+              <span className="flex justify-between text-[10px] text-muted-foreground">
+                <span>Mais suave</span>
+                <span>Mais forte</span>
+              </span>
+            </label>
+          )}
+
+          <div className="mt-3 grid grid-cols-2 gap-1 rounded-lg bg-muted p-1">
+            {(
+              [
+                ["catalogo", "Do catálogo"],
+                ["foto", "Minha foto"],
+              ] as const
+            ).map(([k, text]) => (
               <button
                 key={k}
                 type="button"
-                onClick={() => setKind(k)}
+                onClick={() => setSource(k)}
                 className={cn(
-                  "rounded-full px-3 py-1 text-xs",
-                  kind === k
-                    ? "bg-primary font-semibold text-primary-foreground"
-                    : "text-muted-foreground",
+                  "rounded-md py-1.5 text-xs",
+                  source === k ? "bg-popover font-semibold shadow" : "text-muted-foreground",
                 )}
               >
-                {kindPlural[k]}
+                {text}
               </button>
             ))}
           </div>
-          <div className="relative mt-2">
-            <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Buscar título"
-              className="w-full rounded-md border border-input bg-muted py-1.5 pl-8 pr-2 text-sm outline-none focus:border-primary"
-            />
-          </div>
-          <div className="mt-3 grid max-h-64 grid-cols-4 gap-2 overflow-y-auto pr-1">
-            {list.map((t) => (
-              <Thumb
-                key={t.id}
-                id={t.id}
-                name={t.name}
-                active={wallpaper === t.id}
-                onPick={() => setWallpaper(t.id)}
+
+          {source === "catalogo" ? (
+            <>
+              <div className="mt-3 flex gap-1">
+                {(["serie", "filme", "jogo"] as const).map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    onClick={() => setKind(k)}
+                    className={pill(kind === k)}
+                  >
+                    {kindPlural[k]}
+                  </button>
+                ))}
+              </div>
+              <div className="relative mt-2">
+                <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="Buscar título"
+                  className="w-full rounded-md border border-input bg-muted py-1.5 pl-8 pr-2 text-sm outline-none focus:border-primary"
+                />
+              </div>
+              <div className="mt-3 grid max-h-56 grid-cols-4 gap-2 overflow-y-auto pr-1">
+                {list.map((t) => (
+                  <Thumb
+                    key={t.id}
+                    id={t.id}
+                    name={t.name}
+                    active={wallpaper === t.id}
+                    onPick={() => setWallpaper(t.id)}
+                  />
+                ))}
+              </div>
+              {titles && list.length === 0 && (
+                <p className="mt-2 text-xs text-muted-foreground">Nenhum título encontrado.</p>
+              )}
+            </>
+          ) : (
+            <div className="mt-3 space-y-3">
+              <input
+                ref={fileInput}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => onFile(e.target.files?.[0])}
               />
-            ))}
-          </div>
-          {titles && list.length === 0 && (
-            <p className="mt-2 text-xs text-muted-foreground">Nenhum título encontrado.</p>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => fileInput.current?.click()}
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border py-4 text-sm hover:border-primary disabled:opacity-60"
+              >
+                <Upload className="h-4 w-4" />
+                {busy ? "Aplicando…" : "Enviar foto do seu aparelho"}
+              </button>
+              <div>
+                <p className="text-xs text-muted-foreground">Ou cole o link de uma imagem</p>
+                <div className="mt-1 flex gap-2">
+                  <div className="relative flex-1">
+                    <Link2 className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      value={link}
+                      onChange={(e) => setLink(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && onLink()}
+                      placeholder="https://…"
+                      className="w-full rounded-md border border-input bg-muted py-1.5 pl-8 pr-2 text-sm outline-none focus:border-primary"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={onLink}
+                    className="rounded-md bg-primary px-3 text-xs font-semibold text-primary-foreground"
+                  >
+                    Usar
+                  </button>
+                </div>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                A foto fica salva só neste navegador e não é enviada para ninguém.
+              </p>
+            </div>
           )}
         </div>
       )}

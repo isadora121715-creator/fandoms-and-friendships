@@ -219,18 +219,31 @@ function pickPage(
 const same = (a: string, b: string) => slugify(a) === slugify(b);
 
 /** Vertical poster from TVMaze (series). Only an exact name match counts, preferring the same year. */
-async function tvmazePoster(name: string, year: number) {
+type TvShow = {
+  id: number;
+  name: string;
+  premiered: string | null;
+  image: { medium: string } | null;
+};
+
+/** TVMaze show with exactly this name, preferring the same premiere year. */
+async function tvmazeShow(name: string, year: number): Promise<TvShow | null> {
   const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(name)}`, {
     headers: UA,
   });
   if (!res.ok) return null;
-  const list = (await res.json()) as {
-    show: { name: string; premiered: string | null; image: { medium: string } | null };
-  }[];
-  const shows = list.map((r) => r.show).filter((s) => s.image && same(s.name, name));
-  const pick =
-    (year ? shows.find((s) => Number(s.premiered?.slice(0, 4)) === year) : undefined) ?? shows[0];
-  return pick?.image?.medium ?? null;
+  const list = (await res.json()) as { show: TvShow }[];
+  const shows = list.map((r) => r.show).filter((s) => same(s.name, name));
+  return (
+    (year ? shows.find((s) => Number(s.premiered?.slice(0, 4)) === year) : undefined) ??
+    shows.find((s) => s.image) ??
+    shows[0] ??
+    null
+  );
+}
+
+async function tvmazePoster(name: string, year: number) {
+  return (await tvmazeShow(name, year))?.image?.medium ?? null;
 }
 
 /** Vertical library art from Steam (PC games). Only an exact name match counts. */
@@ -316,6 +329,32 @@ export const titleCover = createServerFn({ method: "POST" })
     ).data;
     if (!t) return { url: null };
     return { url: await findCover({ name: t.name, kind: t.kind as Kind, year: t.year }) };
+  });
+
+/**
+ * TVMaze id of a series (used by the browser to load its seasons, episodes and characters).
+ * Series catalogued under a Portuguese name are matched through their English Wikipedia title.
+ */
+export const titleShow = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((d: unknown) => z.object({ id: z.string().min(1).max(200) }).parse(d))
+  .handler(async ({ data, context }) => {
+    const t = (
+      await context.supabase
+        .from("titles")
+        .select("name, kind, year")
+        .eq("id", data.id)
+        .maybeSingle()
+    ).data;
+    if (!t || t.kind !== "serie") return { showId: null as number | null };
+    const direct = await attempt(() => tvmazeShow(t.name, t.year));
+    if (direct) return { showId: direct.id };
+    const wiki = await attempt(() => wikipediaCover({ name: t.name, kind: "serie", year: t.year }));
+    if (wiki?.enTitle) {
+      const viaEn = await attempt(() => tvmazeShow(cleanName(wiki.enTitle!), t.year));
+      if (viaEn) return { showId: viaEn.id };
+    }
+    return { showId: null };
   });
 
 const trimSynopsis = (s: string) => (s.length > 700 ? s.slice(0, 697).trimEnd() + "…" : s);

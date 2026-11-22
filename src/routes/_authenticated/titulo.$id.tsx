@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Shell } from "@/components/app/Shell";
 import { Avatar, CoverImage, Poster, Stars } from "@/components/app/bits";
 import { PostCard } from "@/components/app/PostCard";
+import { SeriesCharacters, SeriesEpisodes } from "@/components/app/Series";
 import { enrichTitle } from "@/lib/catalog.functions";
 import { setWallpaper, useWallpaper } from "@/lib/prefs";
 import {
@@ -38,6 +39,8 @@ export const Route = createFileRoute("/_authenticated/titulo/$id")({
   component: TitlePage,
 });
 
+type Tab = "sobre" | "episodios" | "resenha" | "comunidade";
+
 function TitlePage() {
   const { id } = Route.useParams();
   const qc = useQueryClient();
@@ -50,12 +53,7 @@ function TitlePage() {
   const [spoiler, setSpoiler] = useState(false);
   const [rec, setRec] = useState(false);
   const wallpaper = useWallpaper();
-  const [season, setSeason] = useState("");
-  const [episode, setEpisode] = useState("");
-  useEffect(() => {
-    setSeason(entry?.season?.toString() ?? "");
-    setEpisode(entry?.episode?.toString() ?? "");
-  }, [entry]);
+  const [tab, setTab] = useState<Tab>("sobre");
 
   // Titles imported from the spreadsheets start without a synopsis: fetch it automatically.
   const needsInfo = !!t && !t.synopsis;
@@ -134,11 +132,23 @@ function TitlePage() {
       </Shell>
     );
   const kind = t.kind as Kind;
+  const tabs: { k: Tab; l: string }[] = [
+    { k: "sobre", l: "Sobre" },
+    ...(kind === "serie" ? [{ k: "episodios" as const, l: "Episódios" }] : []),
+    { k: "resenha", l: "Sua resenha" },
+    { k: "comunidade", l: `Comunidade${posts?.length ? ` (${posts.length})` : ""}` },
+  ];
+  const details: [string, string][] = [
+    ["Tipo", kindLabel[kind]],
+    ...(t.year > 0 ? [["Ano", String(t.year)] as [string, string]] : []),
+    ...(t.genres.length ? [["Gêneros", t.genres.join(", ")] as [string, string]] : []),
+    ...(t.info ? [["Informações", t.info] as [string, string]] : []),
+  ];
 
   return (
     <Shell>
       <div
-        className="relative -mx-4 -mt-6 h-56 overflow-hidden md:h-72"
+        className="relative -mx-4 -mt-6 h-48 overflow-hidden md:h-64"
         style={{
           background: `radial-gradient(circle at 70% 30%, oklch(0.5 0.18 ${t.hue}), transparent 70%)`,
         }}
@@ -146,39 +156,40 @@ function TitlePage() {
         <CoverImage id={t.id} alt="" className="scale-110 opacity-40 blur-2xl" />
         <div className="absolute inset-0 bg-fade" />
       </div>
-      <div className="relative -mt-40 grid gap-6 md:grid-cols-[200px_1fr]">
-        <Poster t={t} showName={false} className="w-36 md:w-full" />
-        <div>
-          <p className="text-sm text-primary">
+
+      {/* Header: poster, name, key facts and the library card */}
+      <div className="relative -mt-32 grid gap-6 md:grid-cols-[180px_1fr]">
+        <Poster t={t} showName={false} className="w-32 md:w-full" />
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-primary">
             {kindLabel[kind]}
             {t.year > 0 ? ` · ${t.year}` : ""}
           </p>
           <h1 className="text-3xl font-extrabold md:text-5xl">{t.name}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {t.info} · {t.genres.join(", ")}
-          </p>
-          <div className="mt-2 flex items-center gap-2 text-sm">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
             {info.avg != null ? (
-              <>
+              <span className="flex items-center gap-2">
                 <Stars value={info.avg} />
-                <span>
-                  {info.avg.toFixed(1)} · {info.count}{" "}
-                  {info.count === 1 ? "avaliação" : "avaliações"}
+                <b>{info.avg.toFixed(1)}</b>
+                <span className="text-muted-foreground">
+                  {info.count} {info.count === 1 ? "avaliação" : "avaliações"}
                 </span>
-              </>
+              </span>
             ) : (
               <span className="text-muted-foreground">Ainda sem notas</span>
             )}
+            {t.genres.slice(0, 3).map((g) => (
+              <span key={g} className="rounded-full bg-muted px-2.5 py-0.5 text-xs">
+                {g}
+              </span>
+            ))}
           </div>
-          <p className="mt-4 max-w-2xl leading-relaxed">
-            {t.synopsis || (
-              <span className="text-muted-foreground">Buscando sinopse na Wikipédia…</span>
-            )}
-          </p>
 
-          <div className="mt-6 rounded-xl border border-border bg-card p-4">
+          <div className="mt-5 rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold">Na sua biblioteca</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Na sua biblioteca
+              </p>
               {entry && (
                 <button
                   onClick={() => remove.mutate()}
@@ -194,18 +205,21 @@ function TitlePage() {
                 <button
                   key={s}
                   onClick={() => save.mutate({ status: s })}
-                  className={`rounded-full px-3 py-1 text-sm ${entry?.status === s ? "bg-brand font-semibold text-primary-foreground" : "border border-border text-muted-foreground"}`}
+                  className={`rounded-full px-3 py-1 text-sm ${entry?.status === s ? "bg-primary font-semibold text-primary-foreground" : "border border-border text-muted-foreground"}`}
                 >
                   {s}
                 </button>
               ))}
             </div>
-            <div className="mt-4 flex flex-wrap items-center gap-4">
-              <Stars
-                value={Number(entry?.rating ?? 0)}
-                size={22}
-                onChange={(v) => save.mutate({ rating: v })}
-              />
+            <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border pt-4">
+              <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                Sua nota
+                <Stars
+                  value={Number(entry?.rating ?? 0)}
+                  size={20}
+                  onChange={(v) => save.mutate({ rating: v })}
+                />
+              </span>
               {kind === "jogo" && (
                 <select
                   value={entry?.platform ?? ""}
@@ -219,37 +233,28 @@ function TitlePage() {
                 </select>
               )}
               {kind === "serie" && (
-                <span className="flex items-center gap-1 text-sm">
-                  T{" "}
-                  <input
-                    type="number"
-                    min={1}
-                    value={season}
-                    onChange={(e) => setSeason(e.target.value)}
-                    onBlur={() => save.mutate({ season: season ? Number(season) : null })}
-                    className="w-14 rounded-md border border-input bg-muted px-1"
-                  />
-                  E{" "}
-                  <input
-                    type="number"
-                    min={1}
-                    value={episode}
-                    onChange={(e) => setEpisode(e.target.value)}
-                    onBlur={() => save.mutate({ episode: episode ? Number(episode) : null })}
-                    className="w-14 rounded-md border border-input bg-muted px-1"
-                  />
-                </span>
+                <button
+                  onClick={() => setTab("episodios")}
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                  {entry?.season && entry?.episode
+                    ? `T${entry.season} · E${entry.episode}`
+                    : "Escolher episódio"}{" "}
+                  <span className="text-primary">›</span>
+                </button>
               )}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
               <button
                 onClick={() => save.mutate({ favorite: !entry?.favorite })}
-                className={`flex items-center gap-1 text-sm ${entry?.favorite ? "text-primary" : "text-muted-foreground"}`}
+                className={`flex items-center gap-1 ${entry?.favorite ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
               >
                 <Heart className={`h-4 w-4 ${entry?.favorite ? "fill-primary" : ""}`} />
                 Favorito
               </button>
               <button
                 onClick={() => setRec(!rec)}
-                className="flex items-center gap-1 text-sm text-secondary"
+                className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
               >
                 <Send className="h-4 w-4" />
                 Recomendar
@@ -260,57 +265,120 @@ function TitlePage() {
                   setWallpaper(on ? null : id);
                   toast(on ? "Papel de parede removido" : `${t.name} agora é seu papel de parede`);
                 }}
-                className={`flex items-center gap-1 text-sm ${wallpaper === id ? "text-primary" : "text-muted-foreground"}`}
+                className={`flex items-center gap-1 ${wallpaper === id ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
               >
                 <Wallpaper className="h-4 w-4" />
-                {wallpaper === id ? "Remover papel de parede" : "Usar como papel de parede"}
+                {wallpaper === id ? "Remover papel de parede" : "Papel de parede"}
               </button>
             </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (review.trim()) publish.mutate();
-              }}
-            >
-              <textarea
-                value={review}
-                onChange={(e) => setReview(e.target.value)}
-                maxLength={2000}
-                placeholder="Escreva sua resenha…"
-                className="mt-4 min-h-20 w-full rounded-lg border border-input bg-muted p-3 text-sm outline-none focus:border-primary"
-              />
-              <div className="mt-2 flex items-center justify-between">
-                <label className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <input
-                    type="checkbox"
-                    checked={spoiler}
-                    onChange={(e) => setSpoiler(e.target.checked)}
-                  />{" "}
-                  Contém spoiler
-                </label>
-                <button
-                  disabled={!review.trim() || publish.isPending}
-                  className="rounded-lg bg-brand px-4 py-1.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-                >
-                  Publicar resenha
-                </button>
-              </div>
-            </form>
             {rec && <Recommend meId={me.id} titleId={id} onDone={() => setRec(false)} />}
           </div>
+        </div>
+      </div>
 
-          <h2 className="mt-8 text-xl font-bold">Da comunidade</h2>
-          {posts?.length === 0 && (
-            <p className="mt-2 text-sm text-muted-foreground">
-              Seja a primeira pessoa a publicar sobre {t.name}.
+      {/* Tabs keep each kind of information in its own place */}
+      <div className="mt-8 flex gap-1 overflow-x-auto border-b border-border">
+        {tabs.map((x) => (
+          <button
+            key={x.k}
+            onClick={() => setTab(x.k)}
+            className={`shrink-0 border-b-2 px-4 py-2.5 text-sm ${tab === x.k ? "border-primary font-semibold text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+          >
+            {x.l}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-6 max-w-3xl">
+        {tab === "sobre" && (
+          <>
+            <h2 className="font-bold">Sinopse</h2>
+            <p className="mt-2 leading-relaxed">
+              {t.synopsis || (
+                <span className="text-muted-foreground">Buscando sinopse na Wikipédia…</span>
+              )}
             </p>
-          )}
-          <div className="mt-3 space-y-3">
+            <dl className="mt-6 grid gap-x-6 gap-y-3 rounded-xl border border-border bg-card p-4 text-sm sm:grid-cols-2">
+              {details.map(([k, v]) => (
+                <div key={k}>
+                  <dt className="text-xs uppercase tracking-wider text-muted-foreground">{k}</dt>
+                  <dd className="mt-0.5">{v}</dd>
+                </div>
+              ))}
+            </dl>
+            {kind === "serie" && <SeriesCharacters titleId={id} />}
+          </>
+        )}
+
+        {tab === "episodios" && kind === "serie" && (
+          <SeriesEpisodes
+            titleId={id}
+            progress={{ season: entry?.season ?? null, episode: entry?.episode ?? null }}
+            saving={save.isPending}
+            onProgress={(season, episode) =>
+              save.mutate({
+                season,
+                episode,
+                status:
+                  entry?.status && entry.status !== "Quero assistir" ? entry.status : "Assistindo",
+              })
+            }
+          />
+        )}
+
+        {tab === "resenha" && (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (review.trim()) publish.mutate();
+            }}
+            className="rounded-xl border border-border bg-card p-4"
+          >
+            <p className="text-sm text-muted-foreground">
+              A resenha vai para o seu perfil e para o feed, com a sua nota (
+              {entry?.rating ? `${Number(entry.rating)} estrelas` : "sem nota ainda"}).
+            </p>
+            <textarea
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+              maxLength={2000}
+              placeholder={`O que você achou de ${t.name}?`}
+              className="mt-3 min-h-32 w-full rounded-lg border border-input bg-muted p-3 text-sm outline-none focus:border-primary"
+            />
+            <div className="mt-2 flex items-center justify-between">
+              <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                <input
+                  type="checkbox"
+                  checked={spoiler}
+                  onChange={(e) => setSpoiler(e.target.checked)}
+                />
+                Contém spoiler
+              </label>
+              <button
+                disabled={!review.trim() || publish.isPending}
+                className="rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+              >
+                Publicar resenha
+              </button>
+            </div>
+          </form>
+        )}
+
+        {tab === "comunidade" && (
+          <div className="space-y-3">
+            {posts?.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                Seja a primeira pessoa a publicar sobre {t.name}.{" "}
+                <button onClick={() => setTab("resenha")} className="text-primary">
+                  Escrever resenha
+                </button>
+              </p>
+            )}
             {posts?.map((p) => (
               <PostCard key={p.id} p={p} meId={me.id} />
             ))}
           </div>
-        </div>
+        )}
       </div>
     </Shell>
   );
